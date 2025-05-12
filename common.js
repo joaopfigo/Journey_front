@@ -1,3 +1,4 @@
+
 // common.js
 function getCurrentUser() {
     return JSON.parse(sessionStorage.getItem("currentUser"));
@@ -21,4 +22,4 @@ function getCurrentUser() {
     const key = getUserKey("colaboradores");
     localStorage.setItem(key, JSON.stringify(colaboradores));
   }
-  
+

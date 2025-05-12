@@ -1,0 +1,12 @@
+{
+  "name": "journey-api",
+  "version": "1.0.0",
+  "description": "API JSON Server para o projeto Journey",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "json-server": "^0.17.3"
+  }
+}

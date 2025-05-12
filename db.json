@@ -1,0 +1,1281 @@
+{
+  "usuarios": [
+    {
+      "id": "c94c",
+      "nome": "joaop",
+      "email": "joaopedrofvalle@gmail.com",
+      "senha": "12345"
+    },
+    {
+      "id": "4477",
+      "nome": "joaov",
+      "email": "joao.valle@sga.pucminas.br",
+      "senha": "12345"
+    },
+    {
+      "id": "1745796540278",
+      "nome": "balao",
+      "email": "joao.pedro@gbv.g12.br",
+      "senha": "12345"
+    }
+  ],
+  "feedback": [],
+  "roteiro": [
+    {
+      "id": "3fc2",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "adoravel",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "170e",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "que bacana",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "ae2b",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "adoravel",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "426a",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "que bacana",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "5535",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "adoravel",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "4c83",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "que bacana",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "c174",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "adoravel",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "da38",
+      "grupoId": "1744348417325",
+      "dia": 1,
+      "tarefa": "que bacana",
+      "email": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "ca4b",
+      "grupoId": "1744691049559",
+      "dia": 1,
+      "tarefa": "que bacana",
+      "email": "joao.pedro@gbv.g12.br"
+    }
+  ],
+  "viagens": [
+    {
+      "id": "b003",
+      "nome": "bacana",
+      "resumo": "",
+      "imagem": "",
+      "usuario": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "c5ba",
+      "nome": "tudo bom",
+      "resumo": "",
+      "imagem": "",
+      "usuario": "joao.valle@sga.pucminas.br"
+    },
+    {
+      "id": "b3fe",
+      "nome": "Orlando",
+      "resumo": "adoro",
+      "imagem": "",
+      "usuario": "joaopedrofvalle@gmail.com"
+    },
+    {
+      "id": "8a04",
+      "nome": "Madrid",
+      "resumo": "adoro",
+      "imagem": "",
+      "usuario": "joao.valle@sga.pucminas.br"
+    },
+    {
+      "id": "a3d7",
+      "nome": "Orlando",
+      "resumo": "adoro",
+      "imagem": "",
+      "usuario": "joao.valle@sga.pucminas.br"
+    },
+    {
+      "id": "e2c7",
+      "nome": "Nice",
+      "resumo": "eba",
+      "imagem": "",
+      "usuario": "joaopedrofvalle@gmail.com"
+    }
+  ],
+  "grupos": [
+    {
+      "id": "1744691049559",
+      "nome": "teste4",
+      "colaboradores": [
+        {
+          "id": "c94c",
+          "nome": "joaop",
+          "email": "joaopedrofvalle@gmail.com",
+          "senha": "12345"
+        },
+        {
+          "id": "4477",
+          "nome": "joaov",
+          "email": "joao.valle@sga.pucminas.br",
+          "senha": "12345"
+        }
+      ],
+      "destino": {
+        "nome": "Orlando",
+        "foto": "imagensDestinos/orlando.jpg",
+        "resumo": "adoro voce"
+      }
+    }
+  ],
+  "fotos": [],
+  "destinosPessoais": [
+    {
+      "id": "joaopedrofvalle%40gmail.com",
+      "email": "joaopedrofvalle@gmail.com",
+      "nome": "Quioto",
+      "foto": "imagensDestinos/quioto.jpg",
+      "resumo": "Resumo automático do destino – personalize depois."
+    },
+    {
+      "id": "joao.valle%40sga.pucminas.br",
+      "email": "joao.valle@sga.pucminas.br",
+      "nome": "Veneza",
+      "foto": "imagensDestinos/veneza.jpg",
+      "resumo": "Resumo automático do destino – personalize depois."
+    },
+    {
+      "id": "joaopedrofvalle_gmail_com",
+      "email": "joaopedrofvalle@gmail.com",
+      "nome": "Nice",
+      "foto": "imagensDestinos/nice.jpg",
+      "resumo": "Resumo automático do destino – personalize depois."
+    }
+  ],
+  "notificacoes": [
+    {
+      "id": "1745799405744",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.pedro@gbv.g12.br",
+      "convidadoNome": "balao",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Convite para Grupo",
+      "mensagem": "joaop te convidou para participar do grupo \"teste4\".",
+      "status": "aceito",
+      "timestamp": 1745799405744
+    },
+    {
+      "id": "1745799629263",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joaopedrofvalle@gmail.com",
+      "convidadoNome": "joaop",
+      "remetenteEmail": "joao.pedro@gbv.g12.br",
+      "titulo": "Roteiro Atualizado",
+      "mensagem": "balao adicionou 1 dia(s) e 1 tarefa(s) no roteiro do grupo 'teste4'.",
+      "status": "info",
+      "timestamp": 1745799629263
+    },
+    {
+      "id": "1745799629263",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joao.pedro@gbv.g12.br",
+      "titulo": "Roteiro Atualizado",
+      "mensagem": "balao adicionou 1 dia(s) e 1 tarefa(s) no roteiro do grupo 'teste4'.",
+      "status": "info",
+      "timestamp": 1745799629263
+    },
+    {
+      "id": "1745802452369",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.pedro@gbv.g12.br",
+      "convidadoNome": "balao",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Convite para Grupo",
+      "mensagem": "joaop te convidou para participar do grupo \"teste4\".",
+      "status": "aceito",
+      "timestamp": 1745802452369
+    },
+    {
+      "id": "17458024637550.7983756001887636",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joaopedrofvalle@gmail.com",
+      "convidadoNome": "joaop",
+      "remetenteEmail": "joao.pedro@gbv.g12.br",
+      "titulo": "Novo membro no grupo",
+      "mensagem": "balao entrou no grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745802463755
+    },
+    {
+      "id": "17458024637550.08003033531783144",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joao.pedro@gbv.g12.br",
+      "titulo": "Novo membro no grupo",
+      "mensagem": "balao entrou no grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745802463755
+    },
+    {
+      "id": "17458024807140.5278604819992051",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joaopedrofvalle@gmail.com",
+      "convidadoNome": "joaop",
+      "remetenteEmail": "joao.pedro@gbv.g12.br",
+      "titulo": "Saída de Colaborador",
+      "mensagem": "balao saiu do grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745802480714
+    },
+    {
+      "id": "17458024807140.6259986205106446",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joao.pedro@gbv.g12.br",
+      "titulo": "Saída de Colaborador",
+      "mensagem": "balao saiu do grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745802480714
+    },
+    {
+      "id": "1745802696152",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "todos",
+      "convidadoNome": "Todos",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Nova mídia adicionada",
+      "mensagem": "joaop adicionou uma nova foto no grupo.",
+      "status": "info",
+      "timestamp": 1745802696157
+    },
+    {
+      "id": "17458031504830.3310711238004578",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Nova mídia adicionada",
+      "mensagem": "joaop adicionou uma nova foto no grupo.",
+      "status": "info",
+      "timestamp": 1745803150483
+    },
+    {
+      "id": "17458032786960.8376164220986524",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Nova mídia adicionada",
+      "mensagem": "joaop adicionou uma nova foto no grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745803278696
+    },
+    {
+      "id": "6b83",
+      "grupoId": "1744691049559",
+      "grupoNome": "Journey",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joao.valle@sga.pucminas.br",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Nova dívida registrada",
+      "mensagem": "Você tem uma nova dívida de R$ 1 registrada por joaopedrofvalle@gmail.com.",
+      "status": "pendente",
+      "timestamp": 1745803374507
+    },
+    {
+      "id": "b545",
+      "grupoId": "1744691049559",
+      "grupoNome": "Journey",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joao.valle@sga.pucminas.br",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Nova dívida registrada",
+      "mensagem": "Você tem uma nova dívida de R$ 1 registrada por joaop.",
+      "status": "pendente",
+      "timestamp": 1745803527713
+    },
+    {
+      "id": "17458075617410.026117717096647675",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaop adicionou o destino \"Madrid\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745807561741
+    },
+    {
+      "id": "17458075948610.1868176382594473",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaop adicionou o destino \"Nice\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745807594861
+    },
+    {
+      "id": "17458076621120.40804286571829007",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaop adicionou o destino \"Nice\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745807662112
+    },
+    {
+      "id": "17458082994810.16679733751363246",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaop adicionou o destino \"Nice\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745808299481
+    },
+    {
+      "id": "17458083401670.5876177016491269",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaop adicionou o destino \"Nice\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745808340167
+    },
+    {
+      "id": "6128",
+      "grupoId": "1744691049559",
+      "grupoNome": "Journey",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joao.valle@sga.pucminas.br",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Nova dívida registrada",
+      "mensagem": "Você tem uma nova dívida de R$ 1 registrada por joaop.",
+      "status": "pendente",
+      "timestamp": 1745811652216
+    },
+    {
+      "id": "17458148422370.20102123892027013",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joaopedrofvalle@gmail.com",
+      "convidadoNome": "joaop",
+      "remetenteEmail": "joao.valle@sga.pucminas.br",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaov adicionou o destino \"Nice\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745814842237
+    },
+    {
+      "id": "17458148800900.6862427067836464",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joaopedrofvalle@gmail.com",
+      "convidadoNome": "joaop",
+      "remetenteEmail": "joao.valle@sga.pucminas.br",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaov adicionou o destino \"Marseille\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745814880090
+    },
+    {
+      "id": "17458164846000.6161761825880645",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaop adicionou o destino \"Nova York\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1745816484600
+    },
+    {
+      "id": "17467341252000.1854926220022579",
+      "grupoId": "1744691049559",
+      "grupoNome": "teste4",
+      "convidadoEmail": "joao.valle@sga.pucminas.br",
+      "convidadoNome": "joaov",
+      "remetenteEmail": "joaopedrofvalle@gmail.com",
+      "titulo": "Destino adicionado",
+      "mensagem": "joaop adicionou o destino \"Orlando\" para o grupo \"teste4\".",
+      "status": "info",
+      "timestamp": 1746734125200
+    }
+  ],
+  "orcamentos": [
+    {
+      "id": "bb7b",
+      "grupoId": "1744344848423",
+      "email": "joao.valle@sga.pucminas.br",
+      "valor": 10
+    },
+    {
+      "id": "b103",
+      "grupoId": "1744348417325",
+      "email": "joaopedrofvalle@gmail.com",
+      "valor": 20
+    },
+    {
+      "id": "9571",
+      "grupoId": "1744691049559",
+      "email": "joao.valle@sga.pucminas.br",
+      "valor": 20
+    },
+    {
+      "id": "a298",
+      "grupoId": "1744691049559",
+      "email": "joaopedrofvalle@gmail.com",
+      "valor": 20
+    }
+  ],
+  "dividas": [
+    {
+      "id": "6a24",
+      "valor": 10,
+      "recebedor": "joao.valle@sga.pucminas.br",
+      "por": "joaopedrofvalle@gmail.com",
+      "devedor": "joaopedrofvalle@gmail.com",
+      "motivo": "bala",
+      "pago": true
+    },
+    {
+      "id": "e427",
+      "valor": 10,
+      "recebedor": "joaopedrofvalle@gmail.com",
+      "devedor": "joao.valle@sga.pucminas.br",
+      "por": "joao.valle@sga.pucminas.br",
+      "motivo": "bala",
+      "grupoId": "1744691049559",
+      "pago": true
+    },
+    {
+      "id": "219f",
+      "valor": 1,
+      "recebedor": "joao.valle@sga.pucminas.br",
+      "por": "joaopedrofvalle@gmail.com",
+      "devedor": "joaopedrofvalle@gmail.com",
+      "motivo": "pirulito",
+      "pago": false
+    },
+    {
+      "id": "6355",
+      "valor": 1,
+      "recebedor": "joao.valle@sga.pucminas.br",
+      "por": "joaopedrofvalle@gmail.com",
+      "devedor": "joaopedrofvalle@gmail.com",
+      "motivo": "uber",
+      "pago": false
+    },
+    {
+      "id": "1947",
+      "valor": 1,
+      "recebedor": "joao.valle@sga.pucminas.br",
+      "por": "joaopedrofvalle@gmail.com",
+      "devedor": "joaopedrofvalle@gmail.com",
+      "motivo": "uber",
+      "pago": false
+    }
+  ],
+  "receber": [
+    {
+      "id": "dc7d",
+      "valor": 10,
+      "dequem": "joao.valle@sga.pucminas.br",
+      "recebedor": "joaopedrofvalle@gmail.com",
+      "por": "joao.valle@sga.pucminas.br",
+      "motivo": "bala",
+      "pago": false,
+      "grupoId": "1744691049559"
+    },
+    {
+      "id": "cb83",
+      "valor": 10,
+      "dequem": "joaopedrofvalle@gmail.com",
+      "recebedor": "joao.valle@sga.pucminas.br",
+      "por": "joaopedrofvalle@gmail.com",
+      "motivo": "bala",
+      "pago": true
+    },
+    {
+      "id": "634c",
+      "valor": 10,
+      "dequem": "joao.valle@sga.pucminas.br",
+      "recebedor": "joaopedrofvalle@gmail.com",
+      "por": "joao.valle@sga.pucminas.br",
+      "motivo": "bala",
+      "pago": true
+    }
+  ],
+  "saldos": [
+    {
+      "id": "3e6e",
+      "grupoId": "1744691049559",
+      "email": "joaopedrofvalle@gmail.com",
+      "valor": 9
+    },
+    {
+      "id": "a6ff",
+      "grupoId": "1744691049559",
+      "email": "joao.valle@sga.pucminas.br",
+      "valor": 31
+    }
+  ],
+  "desejo": [
+    {
+      "id": "1",
+      "nome": "França",
+      "cidades": [
+        {
+          "nome": "Paris",
+          "foto": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Paris_Night.jpg",
+          "resumo": "Monumentos icônicos como Torre Eiffel, Arco do Triunfo e a Catedral de Notre-Dame.",
+          "recomendacao": "Passeios pelo Sena, cafés charmosos e visita ao Louvre."
+        },
+        {
+          "nome": "Nice",
+          "foto": "imagensDestinos/nice.jpg",
+          "resumo": "Belas praias na Costa Azul e atmosfera mediterrânea.",
+          "recomendacao": "Caminhe pelo Promenade des Anglais e aproveite a culinária local."
+        },
+        {
+          "nome": "Marseille",
+          "foto": "imagensDestinos/marseille.jpg",
+          "resumo": "História e diversidade cultural em um dos portos mais antigos do mundo.",
+          "recomendacao": "Explore os mercados e experimente a bouillabaisse."
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "nome": "Espanha",
+      "cidades": [
+        {
+          "nome": "Barcelona",
+          "foto": "imagensDestinos/barcelona.jpg",
+          "resumo": "Arquitetura inovadora com obras de Gaudí e praias urbanas.",
+          "recomendacao": "Visite o Parque Güell e experimente tapas locais."
+        },
+        {
+          "nome": "Madrid",
+          "foto": "imagensDestinos/madrid.jpg",
+          "resumo": "Museus renomados, parques e intensa vida cultural.",
+          "recomendacao": "Passeie pelo Parque do Retiro e visite o Museu do Prado."
+        },
+        {
+          "nome": "Sevilha",
+          "foto": "imagensDestinos/sevilha.jpg",
+          "resumo": "Catedral imponente e rica tradição flamenca.",
+          "recomendacao": "Assista a um autêntico show de flamenco e explore o Alcázar."
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "nome": "Estados Unidos",
+      "cidades": [
+        {
+          "nome": "Nova York",
+          "foto": "imagensDestinos/nova-york.jpg",
+          "resumo": "Estátua da Liberdade, Times Square e Central Park.",
+          "recomendacao": "Explore Manhattan, visite museus e assista a um espetáculo na Broadway."
+        },
+        {
+          "nome": "Los Angeles",
+          "foto": "imagensDestinos/losAngeles.jpg",
+          "resumo": "Calçada da Fama, praias e o universo de Hollywood.",
+          "recomendacao": "Conheça os estúdios de cinema e relaxe nas praias de Santa Monica."
+        },
+        {
+          "nome": "Orlando",
+          "foto": "imagensDestinos/orlando.jpg",
+          "resumo": "Destino mundialmente famoso por seus parques temáticos.",
+          "recomendacao": "Aproveite os parques da Disney e Universal Studios."
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "nome": "Itália",
+      "cidades": [
+        {
+          "nome": "Roma",
+          "foto": "imagensDestinos/roma.jpg",
+          "resumo": "Coliseu, Vaticano e o Fórum Romano.",
+          "recomendacao": "Descubra a história milenar e a arte renascentista."
+        },
+        {
+          "nome": "Veneza",
+          "foto": "imagensDestinos/veneza.jpg",
+          "resumo": "Canais românticos e a icônica Praça de São Marcos.",
+          "recomendacao": "Faça um passeio de gôndola e explore as ruelas encantadoras."
+        },
+        {
+          "nome": "Florença",
+          "foto": "imagensDestinos/florença.jpg",
+          "resumo": "Berço do Renascimento, com a Galeria Uffizi e a Ponte Vecchio.",
+          "recomendacao": "Visite museus e aprecie a culinária toscana."
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "nome": "México",
+      "cidades": [
+        {
+          "nome": "Cidade do México",
+          "foto": "imagensDestinos/cidade-do-mexico.jpg",
+          "resumo": "Ruínas astecas, o Zócalo e museus fascinantes.",
+          "recomendacao": "Explore a história e desfrute da culinária mexicana."
+        },
+        {
+          "nome": "Cancún",
+          "foto": "imagensDestinos/cancun.jpg",
+          "resumo": "Praias paradisíacas de águas cristalinas.",
+          "recomendacao": "Relaxe nos resorts e aproveite os esportes aquáticos."
+        },
+        {
+          "nome": "Playa del Carmen",
+          "foto": "imagensDestinos/playa.jpg",
+          "resumo": "Cidade praiana vibrante com excelente infraestrutura.",
+          "recomendacao": "Curta a gastronomia local e atividades de mergulho."
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "nome": "Turquia",
+      "cidades": [
+        {
+          "nome": "Istambul",
+          "foto": "imagensDestinos/istambul.jpg",
+          "resumo": "Mesquita Azul, Hagia Sophia e o Grande Bazar.",
+          "recomendacao": "Faça um cruzeiro pelo Bósforo e experimente a culinária turca."
+        },
+        {
+          "nome": "Antalya",
+          "foto": "imagensDestinos/antalya.jpg",
+          "resumo": "Praias mediterrâneas e ruínas romanas.",
+          "recomendacao": "Aproveite as calanques e resorts à beira-mar."
+        },
+        {
+          "nome": "Capadócia",
+          "foto": "imagensDestinos/capadócia.jpg",
+          "resumo": "Paisagens surreais com formações rochosas e balões de ar quente.",
+          "recomendacao": "Faça um passeio de balão e explore cidades subterrâneas."
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "nome": "Alemanha",
+      "cidades": [
+        {
+          "nome": "Berlim",
+          "foto": "imagensDestinos/berlim.jpg",
+          "resumo": "Portão de Brandemburgo e vestígios do Muro de Berlim.",
+          "recomendacao": "Visite museus e experimente a vibrante cena noturna."
+        },
+        {
+          "nome": "Munique",
+          "foto": "imagensDestinos/munique.jpg",
+          "resumo": "Marienplatz e o famoso Oktoberfest.",
+          "recomendacao": "Desfrute da cultura bávara e da tradicional cerveja."
+        },
+        {
+          "nome": "Hamburgo",
+          "foto": "imagensDestinos/hamburgo.jpg",
+          "resumo": "Um dos maiores portos da Europa e paisagens industriais.",
+          "recomendacao": "Faça um passeio de barco e visite o Miniatur Wunderland."
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "nome": "Reino Unido",
+      "cidades": [
+        {
+          "nome": "Londres",
+          "foto": "imagensDestinos/londres.jpg",
+          "resumo": "Big Ben, London Eye e Palácio de Buckingham.",
+          "recomendacao": "Explore museus, teatros e passeie pelos parques."
+        },
+        {
+          "nome": "Edimburgo",
+          "foto": "imagensDestinos/edimburgo.jpg",
+          "resumo": "Castelo de Edimburgo e a Royal Mile.",
+          "recomendacao": "Aproveite festivais e a atmosfera medieval."
+        },
+        {
+          "nome": "Bath",
+          "foto": "imagensDestinos/bath.jpg",
+          "resumo": "Banhos romanos e arquitetura georgiana.",
+          "recomendacao": "Relaxe nas termas e explore o centro histórico."
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "nome": "Tailândia",
+      "cidades": [
+        {
+          "nome": "Bangkok",
+          "foto": "imagensDestinos/bangkok.jpg",
+          "resumo": "Templos deslumbrantes e mercados flutuantes.",
+          "recomendacao": "Explore os templos e a vibrante vida noturna."
+        },
+        {
+          "nome": "Phuket",
+          "foto": "imagensDestinos/phuket.jpg",
+          "resumo": "Praias paradisíacas e resorts de luxo.",
+          "recomendacao": "Aproveite os esportes aquáticos e relaxe nas praias."
+        },
+        {
+          "nome": "Chiang Mai",
+          "foto": "imagensDestinos/chiang.jpg",
+          "resumo": "Templos históricos e uma rica tradição cultural.",
+          "recomendacao": "Visite mercados noturnos e retiros espirituais."
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "nome": "China",
+      "cidades": [
+        {
+          "nome": "Pequim",
+          "foto": "imagensDestinos/pequim.jpg",
+          "resumo": "Cidade Proibida e Praça Tiananmen.",
+          "recomendacao": "Explore a história imperial e os jardins clássicos."
+        },
+        {
+          "nome": "Xangai",
+          "foto": "imagensDestinos/xangai.jpg",
+          "resumo": "Modernidade e tradição com o Bund e arranha-céus.",
+          "recomendacao": "Aprecie a fusão do antigo com o novo."
+        },
+        {
+          "nome": "Xi'an",
+          "foto": "imagensDestinos/xian.jpg",
+          "resumo": "Famoso Exército de Terracota e muralhas antigas.",
+          "recomendacao": "Visite sítios arqueológicos e museus."
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "nome": "Japão",
+      "cidades": [
+        {
+          "nome": "Tóquio",
+          "foto": "imagensDestinos/toquio.jpg",
+          "resumo": "Tecnologia avançada e tradições milenares.",
+          "recomendacao": "Explore bairros como Shibuya e templos históricos."
+        },
+        {
+          "nome": "Quioto",
+          "foto": "imagensDestinos/quioto.jpg",
+          "resumo": "Templos zen e belos jardins.",
+          "recomendacao": "Visite o Pavilhão Dourado e experimente a cultura tradicional."
+        },
+        {
+          "nome": "Osaka",
+          "foto": "imagensDestinos/osaka.jpg",
+          "resumo": "Castelo de Osaka e vibrante vida urbana.",
+          "recomendacao": "Desfrute da culinária de rua e centros comerciais."
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "nome": "Austrália",
+      "cidades": [
+        {
+          "nome": "Sydney",
+          "foto": "imagensDestinos/sydney.jpg",
+          "resumo": "Opera House, Harbour Bridge e belas praias.",
+          "recomendacao": "Faça um cruzeiro no porto e visite Bondi Beach."
+        },
+        {
+          "nome": "Melbourne",
+          "foto": "imagensDestinos/melbourne.jpg",
+          "resumo": "Cidade cultural com arte de rua e cafés.",
+          "recomendacao": "Explore galerias, teatros e parques."
+        },
+        {
+          "nome": "Brisbane",
+          "foto": "imagensDestinos/brisbane.jpg",
+          "resumo": "Cidade ensolarada próxima à natureza.",
+          "recomendacao": "Aproveite os espaços verdes e atividades ao ar livre."
+        }
+      ]
+    },
+    {
+      "id": "13",
+      "nome": "República Tcheca",
+      "cidades": [
+        {
+          "nome": "Praga",
+          "foto": "imagensDestinos/praga.jpg",
+          "resumo": "Castelo de Praga e Ponte Carlos.",
+          "recomendacao": "Caminhe pelo centro histórico e visite cafés tradicionais."
+        },
+        {
+          "nome": "Brno",
+          "foto": "imagensDestinos/brno.jpg",
+          "resumo": "Cidade universitária com mistura de arquitetura moderna e antiga.",
+          "recomendacao": "Explore museus e parques."
+        },
+        {
+          "nome": "Český Krumlov",
+          "foto": "imagensDestinos/cesky.jpg",
+          "resumo": "Encanto medieval e ruas pitorescas.",
+          "recomendacao": "Desfrute de passeios de barco e festivais culturais."
+        }
+      ]
+    },
+    {
+      "id": "14",
+      "nome": "Países Baixos",
+      "cidades": [
+        {
+          "nome": "Amsterdã",
+          "foto": "imagensDestinos/amsterdam.jpg",
+          "resumo": "Canais históricos e a Casa de Anne Frank.",
+          "recomendacao": "Explore de bicicleta e visite museus."
+        },
+        {
+          "nome": "Rotterdam",
+          "foto": "imagensDestinos/rotterdam.jpg",
+          "resumo": "Arquitetura moderna e porto movimentado.",
+          "recomendacao": "Conheça o mercado de arte e a cena cultural."
+        },
+        {
+          "nome": "Haia",
+          "foto": "imagensDestinos/haia.jpg",
+          "resumo": "Centro governamental e museus renomados.",
+          "recomendacao": "Visite o Mauritshuis e o Binnenhof."
+        }
+      ]
+    },
+    {
+      "id": "15",
+      "nome": "Bélgica",
+      "cidades": [
+        {
+          "nome": "Bruxelas",
+          "foto": "imagensDestinos/bruxelas.jpg",
+          "resumo": "Capital europeia com chocolates e cervejas famosas.",
+          "recomendacao": "Explore a Grand Place e os museus locais."
+        },
+        {
+          "nome": "Bruges",
+          "foto": "imagensDestinos/bruges.jpg",
+          "resumo": "Cidade medieval encantadora com canais pitorescos.",
+          "recomendacao": "Faça um passeio de barco e visite igrejas históricas."
+        },
+        {
+          "nome": "Antuérpia",
+          "foto": "imagensDestinos/antuérpia.jpg",
+          "resumo": "Capital da moda e dos diamantes.",
+          "recomendacao": "Descubra galerias de arte e lojas exclusivas."
+        }
+      ]
+    },
+    {
+      "id": "16",
+      "nome": "Suíça",
+      "cidades": [
+        {
+          "nome": "Zurique",
+          "foto": "imagensDestinos/zurique.jpg",
+          "resumo": "Centro financeiro com lagos e vistas alpinas.",
+          "recomendacao": "Faça um cruzeiro pelo lago e visite museus."
+        },
+        {
+          "nome": "Genebra",
+          "foto": "imagensDestinos/genebra.jpg",
+          "resumo": "Cidade internacional com o Lago Léman.",
+          "recomendacao": "Visite o Jet d'Eau e passeie pelo centro histórico."
+        },
+        {
+          "nome": "Lucerna",
+          "foto": "imagensDestinos/lucerna.jpg",
+          "resumo": "Ponte da Capela e vistas deslumbrantes dos Alpes.",
+          "recomendacao": "Explore o centro histórico e faça passeios de barco."
+        }
+      ]
+    },
+    {
+      "id": "17",
+      "nome": "Hungria",
+      "cidades": [
+        {
+          "nome": "Budapeste",
+          "foto": "imagensDestinos/budapeste.jpg",
+          "resumo": "Parlamento, Castelo de Buda e termas.",
+          "recomendacao": "Aproveite os banhos termais e os passeios pelo Danúbio."
+        },
+        {
+          "nome": "Debrecen",
+          "foto": "imagensDestinos/debrecen.jpg",
+          "resumo": "Centro cultural do leste húngaro.",
+          "recomendacao": "Participe dos festivais locais e visite museus."
+        },
+        {
+          "nome": "Szeged",
+          "foto": "imagensDestinos/szeged.jpg",
+          "resumo": "Cidade com arquitetura Art Nouveau e clima ameno.",
+          "recomendacao": "Explore praças e participe de eventos culturais."
+        }
+      ]
+    },
+    {
+      "id": "18",
+      "nome": "Singapura",
+      "cidades": [
+        {
+          "nome": "Singapura",
+          "foto": "imagensDestinos/singapura.jpg",
+          "resumo": "Cidade-estado moderna e multicultural.",
+          "recomendacao": "Passeie por Marina Bay e explore os jardins botânicos."
+        }
+      ]
+    },
+    {
+      "id": "19",
+      "nome": "Croácia",
+      "cidades": [
+        {
+          "nome": "Zagreb",
+          "foto": "imagensDestinos/zagreb.jpg",
+          "resumo": "Capital com rica herança cultural e histórica.",
+          "recomendacao": "Visite o centro histórico e museus."
+        },
+        {
+          "nome": "Split",
+          "foto": "imagensDestinos/split.jpg",
+          "resumo": "Palácio de Diocleciano e vestígios romanos.",
+          "recomendacao": "Explore a orla marítima e restaurantes locais."
+        },
+        {
+          "nome": "Dubrovnik",
+          "foto": "imagensDestinos/dubrovnik.jpg",
+          "resumo": "Cidade murada com vistas deslumbrantes do Mar Adriático.",
+          "recomendacao": "Caminhe pelas muralhas e aproveite as praias."
+        }
+      ]
+    },
+    {
+      "id": "20",
+      "nome": "Emirados Árabes Unidos",
+      "cidades": [
+        {
+          "nome": "Dubai",
+          "foto": "imagensDestinos/dubai.jpg",
+          "resumo": "Arranha-céus luxuosos e centros comerciais impressionantes.",
+          "recomendacao": "Visite o Burj Khalifa e faça um safari no deserto."
+        },
+        {
+          "nome": "Abu Dhabi",
+          "foto": "imagensDestinos/abu.jpg",
+          "resumo": "Mesquita Sheikh Zayed e modernas atrações culturais.",
+          "recomendacao": "Explore a Corniche e visite museus."
+        },
+        {
+          "nome": "Sharjah",
+          "foto": "imagensDestinos/sharjah.jpg",
+          "resumo": "Centro cultural com museus e galerias de arte.",
+          "recomendacao": "Conheça o mercado tradicional e a cena artística."
+        }
+      ]
+    },
+    {
+      "id": "21",
+      "nome": "Arábia Saudita",
+      "cidades": [
+        {
+          "nome": "Riad",
+          "foto": "imagensDestinos/riad.jpg",
+          "resumo": "Cidade moderna com centros comerciais e históricos.",
+          "recomendacao": "Explore tanto a arquitetura contemporânea quanto os mercados tradicionais."
+        },
+        {
+          "nome": "Jeddah",
+          "foto": "imagensDestinos/jeddah.jpg",
+          "resumo": "Cidade costeira com rica herança cultural e histórica.",
+          "recomendacao": "Visite o centro antigo e os souks."
+        },
+        {
+          "nome": "Dammam",
+          "foto": "imagensDestinos/dammam.jpg",
+          "resumo": "Centro econômico com infraestrutura moderna.",
+          "recomendacao": "Aproveite os parques urbanos e centros comerciais."
+        }
+      ]
+    },
+    {
+      "id": "22",
+      "nome": "Coreia do Sul",
+      "cidades": [
+        {
+          "nome": "Seul",
+          "foto": "imagensDestinos/seul.jpg",
+          "resumo": "Cidade dinâmica com tradição e tecnologia.",
+          "recomendacao": "Visite palácios e experimente a culinária local."
+        },
+        {
+          "nome": "Busan",
+          "foto": "imagensDestinos/busan.jpg",
+          "resumo": "Praias urbanas e mercados tradicionais.",
+          "recomendacao": "Relaxe em Haeundae e explore o mercado de peixe."
+        }
+      ]
+    },
+    {
+      "id": "23",
+      "nome": "Indonésia",
+      "cidades": [
+        {
+          "nome": "Denpasar (Bali)",
+          "foto": "imagensDestinos/denpasar.jpg",
+          "resumo": "Ilha paradisíaca com rica cultura e praias incríveis.",
+          "recomendacao": "Explore templos e desfrute dos resorts de luxo."
+        },
+        {
+          "nome": "Jakarta",
+          "foto": "imagensDestinos/jakarta.jpg",
+          "resumo": "Metrópole vibrante com forte influência cultural.",
+          "recomendacao": "Visite museus e centros culturais modernos."
+        },
+        {
+          "nome": "Yogyakarta",
+          "foto": "imagensDestinos/yogyakarta.jpg",
+          "resumo": "Centro cultural com templos históricos e artes tradicionais.",
+          "recomendacao": "Não perca Borobudur e Prambanan."
+        }
+      ]
+    },
+    {
+      "id": "24",
+      "nome": "Índia",
+      "cidades": [
+        {
+          "nome": "Nova Délhi",
+          "foto": "imagensDestinos/nova.jpg",
+          "resumo": "Cidade que mistura o antigo com o moderno, rica em história e cultura.",
+          "recomendacao": "Visite monumentos históricos e mercados vibrantes."
+        },
+        {
+          "nome": "Mumbai",
+          "foto": "imagensDestinos/mumbai.jpg",
+          "resumo": "Centro financeiro e cultural, repleto de energia e diversidade.",
+          "recomendacao": "Conheça o Gateway of India e as praias urbanas."
+        },
+        {
+          "nome": "Agra",
+          "foto": "imagensDestinos/agra.jpg",
+          "resumo": "Famoso pelo Taj Mahal, símbolo do amor eterno.",
+          "recomendacao": "Explore os jardins e a arquitetura mogol."
+        }
+      ]
+    },
+    {
+      "id": "25",
+      "nome": "Rússia",
+      "cidades": [
+        {
+          "nome": "Moscou",
+          "foto": "imagensDestinos/moscou.jpg",
+          "resumo": "Kremlin, Praça Vermelha e catedrais imponentes.",
+          "recomendacao": "Descubra a história e a rica arte russa."
+        },
+        {
+          "nome": "São Petersburgo",
+          "foto": "imagensDestinos/sao.jpg",
+          "resumo": "Palácio de Inverno, Hermitage e canais históricos.",
+          "recomendacao": "Aprecie a arquitetura imperial e os museus."
+        },
+        {
+          "nome": "Sochi",
+          "foto": "imagensDestinos/sochi.jpg",
+          "resumo": "Destino turístico para verão e inverno, com praias e montanhas.",
+          "recomendacao": "Visite resorts e desfrute de atividades ao ar livre."
+        }
+      ]
+    },
+    {
+      "id": "26",
+      "nome": "Canadá",
+      "cidades": [
+        {
+          "nome": "Toronto",
+          "foto": "imagensDestinos/toronto.jpg",
+          "resumo": "Diversidade cultural e o icônico CN Tower.",
+          "recomendacao": "Explore bairros culturais e museus."
+        },
+        {
+          "nome": "Vancouver",
+          "foto": "imagensDestinos/vancouver.jpg",
+          "resumo": "Cidade com vistas deslumbrantes de montanhas e mar.",
+          "recomendacao": "Aproveite a natureza e faça trilhas."
+        },
+        {
+          "nome": "Montreal",
+          "foto": "imagensDestinos/montreal.jpg",
+          "resumo": "Cidade histórica com forte influência francesa.",
+          "recomendacao": "Visite o Old Montreal e participe de festivais culturais."
+        }
+      ]
+    },
+    {
+      "id": "27",
+      "nome": "Nova Zelândia",
+      "cidades": [
+        {
+          "nome": "Auckland",
+          "foto": "imagensDestinos/auckland.jpg",
+          "resumo": "Maior cidade da Nova Zelândia com paisagens urbanas e naturais.",
+          "recomendacao": "Explore a cultura Maori e os belos portos."
+        },
+        {
+          "nome": "Wellington",
+          "foto": "imagensDestinos/wellington.jpg",
+          "resumo": "Capital charmosa com museus e cafés aconchegantes.",
+          "recomendacao": "Desfrute da vida cultural e das vistas do porto."
+        },
+        {
+          "nome": "Queenstown",
+          "foto": "imagensDestinos/queenstown.jpg",
+          "resumo": "Destino de aventura com paisagens deslumbrantes.",
+          "recomendacao": "Pratique esportes radicais e explore a natureza."
+        }
+      ]
+    },
+    {
+      "id": "28",
+      "nome": "Brasil",
+      "cidades": [
+        {
+          "nome": "Rio de Janeiro",
+          "foto": "imagensDestinos/rio.jpg",
+          "resumo": "Cristo Redentor, praias icônicas e carnaval vibrante.",
+          "recomendacao": "Desfrute das festas e das belas paisagens naturais."
+        },
+        {
+          "nome": "São Paulo",
+          "foto": "imagensDestinos/sp.jpg",
+          "resumo": "Centro financeiro, arte urbana e diversidade cultural.",
+          "recomendacao": "Explore museus, parques e a cena gastronômica."
+        },
+        {
+          "nome": "Salvador",
+          "foto": "imagensDestinos/salvador.jpg",
+          "resumo": "Cultura afro-brasileira, música e culinária típica.",
+          "recomendacao": "Visite o Pelourinho e aproveite as praias."
+        }
+      ]
+    },
+    {
+      "id": "29",
+      "nome": "Argentina",
+      "cidades": [
+        {
+          "nome": "Buenos Aires",
+          "foto": "imagensDestinos/buenos.jpg",
+          "resumo": "Arquitetura histórica, tango e rica cultura.",
+          "recomendacao": "Explore os bairros de San Telmo e La Boca."
+        },
+        {
+          "nome": "Mendoza",
+          "foto": "imagensDestinos/mendoza.jpg",
+          "resumo": "Região vinícola com paisagens de tirar o fôlego.",
+          "recomendacao": "Faça tours pelas vinícolas e desfrute dos vinhos locais."
+        },
+        {
+          "nome": "Bariloche",
+          "foto": "imagensDestinos/bariloche.jpeg",
+          "resumo": "Lagos e montanhas, ideal para esportes e natureza.",
+          "recomendacao": "Pratique esqui no inverno e trilhas no verão."
+        }
+      ]
+    },
+    {
+      "id": "30",
+      "nome": "Egito",
+      "cidades": [
+        {
+          "nome": "Cairo",
+          "foto": "imagensDestinos/cairo.jpg",
+          "resumo": "Pirâmides de Gizé e a Grande Esfinge.",
+          "recomendacao": "Explore os mercados e o Khan El Khalili."
+        },
+        {
+          "nome": "Luxor",
+          "foto": "imagensDestinos/luxor.jpg",
+          "resumo": "Templos e tumbas no Vale dos Reis.",
+          "recomendacao": "Visite o Templo de Karnak e as ruínas antigas."
+        },
+        {
+          "nome": "Alexandria",
+          "foto": "imagensDestinos/alexandria.jpg",
+          "resumo": "História antiga, Biblioteca de Alexandria e orla mediterrânea.",
+          "recomendacao": "Descubra a herança egípcia e relaxe na costa."
+        }
+      ]
+    }
+  ]
+}
