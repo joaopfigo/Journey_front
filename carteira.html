@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journey - Carteira Integrado</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <!-- Estilos combinados -->
+  <style>
+    /* Estilos gerais combinados */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: sans-serif; background-color: #fff; }
+    /* Navbar */
+    .container-fluid { background-color: rgb(140, 187, 225); }
+    nav { display: flex; justify-content: space-between; align-items: center; background-color: rgb(140, 187, 225); }
+    .nav-item { margin: 20px; }
+    .btn { transition: all 200ms ease-in; transform: scale(1); background-color: rgb(231,141,131); color: black; }
+    .btn:hover { transform: scale(1.1); }
+    /* Seções internas */
+    .section { display: none; padding: 20px; }
+    .section.active { display: block; }
+    /* Navegação interna */
+    .internal-nav { text-align: center; margin: 20px 0; }
+    .internal-nav .btn { margin: 0 10px; }
+    /* Carteira - Estilos de orçamento */
+    .carteira-container { margin-top: 30px; }
+    .carteira-row { display: flex; flex-wrap: wrap; }
+    .carteira-col { flex: 1; min-width: 250px; padding: 20px; text-align: center; }
+    /* Dívidas e Valores (estilos combinados) */
+    .dividas-container { margin-top: 30px; }
+    .dividas-row { display: flex; flex-wrap: wrap; }
+    .dividas-col { flex: 1; min-width: 250px; padding: 20px; }
+    .link { text-decoration: none; }
+    .botao { display: block; margin-top: 10px; background-color: rgb(231,141,131); width: 240px; height: 40px; }
+    .adicionardivida, .adicionarval { margin-bottom: 20px; }
+    .adicionardivida input, .adicionarval input { width: 100%; margin: 5px 0; padding: 8px; }
+    .novadivida, .novadivida {display: flex; align-items: center; justify-content: flex-start; gap: 10px; margin: 10px 0;}
+    .impressaopagar, .impressaoreceber { margin-left: 15px; }
+    .checkdiv, .checkrec { width: 15px; height: 15px; }
+    .fa-trash { margin-left: 25px; cursor: pointer; }
+    .dividapaga, .valorrecebido { text-decoration: line-through; }
+    .exibesomadiv, .exibesomarec { text-align: center; margin-bottom: 15px; }
+    /* Editar Carteira */
+    .editar-container { margin-top: 30px; }
+    .editar-row { display: flex; flex-wrap: wrap; }
+    .editar-col { flex: 1; min-width: 250px; padding: 20px; text-align: center; }
+    /* Responsividade */
+    @media (max-width: 768px) {
+      .carteira-row, .editar-row, .dividas-row { flex-direction: column; align-items: center; }
+    }
+  </style>
+  <script src="common.js"></script>
+</head>
+<body>
+  <!-- Cabeçalho Comum -->
+  <header>
+    <nav class="navbar navbar-expand-lg py-3">
+      <div class="container-fluid">
+        <!-- Botão Journey: permanece fixo e redireciona para o menu principal -->
+        <button type="button" class="btn btn-secondary btn-lg" onclick="showSection('sectionCarteira')">Journey</button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="viagens_desejados_sac.html"><h5>Minhas Viagens</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="viagens_desejados_sac.html"><h5>Destinos Desejados</h5></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="viagens_desejados_sac.html"><h5>SAC</h5></a>
+            </li>
+          </ul>
+          <button onclick="logout()" type="button" class="btn btn-secondary btn-lg">Logout</button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Navegação interna entre seções -->
+  <div class="internal-nav">
+    <select id="selectGrupo" class="form-select w-auto d-inline-block me-3"></select>
+    <button class="btn btn-primary" onclick="showSection('sectionCarteira')">Carteira</button>
+    <button class="btn btn-primary" onclick="showSection('sectionDividas')">Dívidas e Valores</button>
+  </div>
+
+  <!-- Seção 1: Carteira (Orçamento) com edição -->
+  <div id="sectionCarteira" class="section">
+    <div class="container carteira-container">
+      <div class="row carteira-row">
+        <!-- Coluna: Orçamento do grupo -->
+        <div class="col carteira-col">
+          <h2>Orçamento do grupo</h2>
+          <div id="mostrarsoma"></div>
+        </div>
+        <!-- Coluna: Orçamento pessoal -->
+        <div class="col carteira-col">
+          <h2>Orçamento pessoal</h2>
+          <div id="mostrarorcpess"></div>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <!-- Seção de edição de orçamento -->
+      <div class="row editar-row">
+        <!-- Exibição do saldo -->
+        <div class="col editar-col">
+          <h2>Seu saldo atual</h2>
+          <div id="mostrarorcamentoSaldo"></div>
+        </div>
+
+        <!-- Formulário para novo orçamento -->
+        <div class="col editar-col">
+          <h2>Novo orçamento</h2>
+          <input type="number" min="1" placeholder="R$" id="entradadeorcamento" />
+          <button class="btn mt-2" onclick="adicionarorcamento()">Salvar</button>
+        </div>
+      </div>
+    </div>
+
+      <hr class="my-4">
+      <div class="row editar-row">
+        <div class="col editar-col">
+          <h4>Debitar valor</h4>
+          <input type="number" id="debitarSaldo" min="0" placeholder="R$">
+          <button class="btn mt-2" onclick="debitarSaldo()">Debitar</button>
+        </div>
+        <div class="col editar-col">
+          <h4>Depositar valor</h4>
+          <input type="number" id="depositarSaldo" min="0" placeholder="R$">
+          <button class="btn mt-2" onclick="depositarSaldo()">Depositar</button>
+        </div>
+      </div>
+  </div>
+
+  <!-- Seção 2: Dívidas e Valores a Receber -->
+  <div id="sectionDividas" class="section">
+    <div class="container">
+      <div class="row">
+        <!-- Botão lateral para voltar -->
+        <div class="colbot">
+          <button id="voltarDividas" class="botao btn" onclick="showSection('sectionCarteira')">Voltar para Carteira</button>
+        </div>
+        <!-- Coluna para Dívidas -->
+        <div class="col">
+          <h2 id="titexibe">Suas dívidas</h2>
+          <h4 id="somadiv"></h4>
+          <div id="listadiv"></div>
+        </div>
+        <!-- Coluna para Valores a Receber -->
+        <div class="col">
+          <h2 id="titexibe">Valores a receber</h2>
+          <h4 id="somareceber"></h4>
+          <div id="listaval"></div>
+        </div>
+      </div>
+      <!-- Formulários para adicionar Dívida e Valor a Receber -->
+      <div class="row">
+        <!-- Adicionar Dívida -->
+        <div class="col">
+          <div class="adicionardivida">
+            <h2>Adicionar dívida</h2>
+            <h5>Valor:</h5>
+            <input type="number" min="0" id="valdivida">
+            <h5>A quem:</h5>
+            <select id="aquempagar" class="form-select"></select>
+            <h5>Por:</h5>
+            <input type="text" id="oquepagar">
+            <h5>Motivo:</h5>
+            <input type="text" id="motivoDivida">
+            <button class="btn" type="button" id="btnAdicionarDivida" onclick="AdicionarDivida()">Adicionar</button>
+          </div>
+        </div>
+        <!-- Adicionar Valor a Receber -->
+        <div class="col">
+          <div class="adicionarval">
+            <h2>Adicionar valor a receber</h2>
+            <h5>Valor:</h5>
+            <input type="number" min="0" id="valareceber">
+            <h5>De quem:</h5>
+            <input type="text" id="dequemreceber">
+            <h5>Por:</h5>
+            <select id="porreceber" class="form-select"></select>
+            <h5>Motivo:</h5>
+            <input type="text" id="motivoReceber">
+            <button class="btn" type="button" id="btnAdicionarValReceber" onclick="AdicionarValReceber()">Adicionar</button>
+          </div>
+        </div>
+      </div>
+      <div id="notificacao"></div>
+    </div>
+  </div>
+
+  <!-- Scripts Necessários -->
+  <!-- Variável global da API -->
+  <script>
+    const apiUrl = "https://journey-c6wf.onrender.com";
+    const currentUser = getCurrentUser();
+  if (!currentUser) window.location.href = "login_cadastro.html";
+
+  const gruposKey = getUserKey("grupos");
+  let grupos = [];
+
+  let grupoSelecionado = grupos.length > 0 ? grupos[0].id : null;
+  validarGruposLocalStorage();
+
+  function validarGruposLocalStorage() {
+    let alterado = false;
+
+    grupos.forEach((grupo, i) => {
+      if (!Array.isArray(grupo.colaboradores)) {
+        grupos[i].colaboradores = [];
+        alterado = true;
+      }
+    });
+
+    if (alterado) {
+      localStorage.setItem(gruposKey, JSON.stringify(grupos));
+      console.warn("⚠️ Grupos corrigidos no localStorage: faltavam.colaboradores.");
+    }
+  }
+
+
+  function atualizarCamposCarteira() {
+    const selectGrupo = document.getElementById("selectGrupo");
+
+    // Preenche o select de grupos
+    selectGrupo.innerHTML = ""; // Limpa antes
+    grupos.forEach(grupo => {
+      const option = document.createElement("option");
+      option.value = grupo.id;
+      option.textContent = grupo.nome;
+      selectGrupo.appendChild(option);
+    });
+
+    // Define grupo inicialmente selecionado
+    grupoSelecionado = grupos.length > 0 ? grupos[0].id : null;
+    selectGrupo.value = grupoSelecionado;
+
+    // Atualiza tudo quando muda de grupo
+    selectGrupo.addEventListener("change", (e) => {
+      grupoSelecionado = e.target.value;
+      atualizarCarteira();
+      preencherCamposSelects();
+    });
+
+    atualizarCarteira();
+    preencherCamposSelects();
+
+    // Preenche automaticamente os campos com o e-mail do usuário
+    const inputDeQuem = document.getElementById("dequemreceber");
+    if (inputDeQuem) inputDeQuem.value = currentUser.email;
+    const inputPor = document.getElementById("oquepagar");
+    if (inputPor) inputPor.value = currentUser.email;
+  }
+
+  function atualizarCarteira() {
+    imprimeorcpess();               // orçamento pessoal
+    imprimeorc();                   // saldo
+    imprimirSaldo();                 // saldo detalhado
+    calcularSomaOrcamentoGrupo();
+    imprimeReceber();
+  }
+
+  function preencherCamposSelects() {
+    const grupoAtual = grupos.find(g => g.id == grupoSelecionado);
+    const selectAQuem = document.getElementById("aquempagar");
+    const selectPorReceber = document.getElementById("porreceber");
+
+    if (!selectAQuem || !selectPorReceber) return;
+
+    selectAQuem.innerHTML = "";
+    selectPorReceber.innerHTML = "";
+
+    if (grupoAtual && grupoAtual.colaboradores) {
+      grupoAtual.colaboradores.forEach(colab => {
+        if (colab.email !== currentUser.email) {
+          const nomeFinal = colab.nome || colab.email;
+          const opt1 = document.createElement("option");
+          opt1.value = colab.email;
+          opt1.textContent = nomeFinal;
+          selectAQuem.appendChild(opt1);
+
+          const opt2 = document.createElement("option");
+          opt2.value = colab.email;
+          opt2.textContent = nomeFinal;
+          selectPorReceber.appendChild(opt2);
+        }
+      });
+    }
+  }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetch(`${apiUrl}/grupos`)
+        .then(res => res.json())
+        .then(dados => {
+          grupos = dados.filter(grupo =>
+            grupo.colaboradores.some(colab => colab.email === currentUser.email)
+          );
+          localStorage.setItem(getUserKey("grupos"), JSON.stringify(grupos));
+          atualizarCamposCarteira();
+        });
+    });
+
+  </script>
+
+  <!-- Função de navegação interna -->
+  <script>
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(sectionId).classList.add('active');
+    }
+    function logout() {
+      window.location.href = "login_cadastro.html";
+    }
+  </script>
+
+  <!-- Módulo Carteira (orçamento, soma, exibição) -->
+  <script>
+    var localStoragekey = 'listadeorcamento';
+    var orcamento = JSON.parse(localStorage.getItem('listadeorcamento') || "[]");
+
+    function calcularSomaOrcamentoGrupo() {
+      const grupo = grupos.find(g => g.id == grupoSelecionado);
+      if (!grupo || !grupo.colaboradores) return;
+
+      fetch(`${apiUrl}/orcamentos?grupoId=${grupoSelecionado}`)
+        .then(res => res.json())
+        .then(orcamentos => {
+          let somaTotal = 0;
+          grupo.colaboradores.forEach(colab => {
+            const orc = orcamentos.find(o => o.email === colab.email);
+            if (orc && !isNaN(orc.valor)) {
+              somaTotal += Number(orc.valor);
+            }
+          });
+
+          const chaveGrupo = getUserKey(`soma_${grupoSelecionado}`);
+          localStorage.setItem(chaveGrupo, JSON.stringify(somaTotal));
+
+          const numberFormat = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+          document.getElementById('mostrarsoma').innerHTML = `<h3>${numberFormat.format(somaTotal)}</h3>`;
+        })
+        .catch(err => {
+          console.error("Erro ao calcular orçamento do grupo:", err);
+        });
+    }
+
+    function imprimeorcpess() {
+      fetch(`${apiUrl}/orcamentos?grupoId=${grupoSelecionado}&email=${currentUser.email}`)
+        .then(res => res.json())
+        .then(data => {
+          const valor = data.length > 0 ? Number(data[0].valor) : 0;
+          const numberFormat = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+          document.getElementById('mostrarorcpess').innerHTML = `<h3>${numberFormat.format(valor)}</h3>`;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await fetch(`${apiUrl}/grupos`)
+        .then(res => res.json())
+        .then(dados => {
+          grupos = dados.filter(grupo =>
+            grupo.colaboradores.some(colab => colab.email === currentUser.email)
+          );
+          localStorage.setItem(getUserKey("grupos"), JSON.stringify(grupos));
+          if (grupos.length > 0) {
+              grupoSelecionado = grupos[0].id;
+            } else {
+              console.error("Nenhum grupo disponível para seleção.");
+              return;
+            }
+
+
+          atualizarCamposCarteira();
+          CarregaDividas();
+          CarregaValoresRec();
+          imprimirSaldo();
+          showSection('sectionDividas');
+        })
+        .catch(err => {
+          console.error("Erro ao carregar grupos:", err);
+        });
+    });
+
+
+    function imprimirSaldo() {
+      if (!grupoSelecionado || !currentUser?.email) {
+        console.warn("Grupo ou usuário não definidos.");
+        document.getElementById("mostrarorcamentoSaldo").innerHTML = `<h3>Erro</h3>`;
+        return;
+      }
+
+      fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${currentUser.email}`)
+        .then(res => {
+          if (!res.ok) throw new Error("Falha ao buscar saldo.");
+          return res.json();
+        })
+        .then(data => {
+          const valor = data.length > 0 ? Number(data[0].valor) : 0;
+          const numberFormat = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+          document.getElementById("mostrarorcamentoSaldo").innerHTML = `<h3>${numberFormat.format(valor)}</h3>`;
+        })
+        .catch(err => {
+          console.error("Erro ao carregar saldo:", err);
+          document.getElementById("mostrarorcamentoSaldo").innerHTML = `<h3>Erro</h3>`;
+        });
+    }
+
+
+    function imprimeorcamentoSaldo() {
+      let chave = getUserKey(`saldo_${grupoSelecionado}`);
+      let saldo = JSON.parse(localStorage.getItem(chave)) || 0;
+      const numberFormat = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+      document.getElementById('mostrarorcamentoSaldo').innerHTML = `<h3>${numberFormat.format(saldo)}</h3>`;
+    }
+
+    document.addEventListener("DOMContentLoaded", function(){
+      imprimeorcpess();
+    });
+
+    var inputorcamento = document.getElementById("entradadeorcamento");
+
+    function adicionarorcamento() {
+      const valor = document.getElementById("entradadeorcamento").value.trim();
+      if (!valor) {
+        alert("Por favor, insira um valor válido.");
+        return;
+      }
+
+      const valorNum = Number(valor);
+      const chaveSaldo = getUserKey(`saldo_${grupoSelecionado}_${currentUser.email}`);
+      localStorage.setItem(chaveSaldo, JSON.stringify(valorNum)); // Mantém o saldo local
+
+      // Atualiza saldo também na API
+      const saldoNovo = {
+        grupoId: grupoSelecionado,
+        email: currentUser.email,
+        valor: valorNum
+      };
+
+      fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${currentUser.email}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.length > 0) {
+            // Atualiza saldo existente
+            return fetch(`${apiUrl}/saldos/${data[0].id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...data[0], valor: valorNum })
+            });
+          } else {
+            // Cria novo saldo
+            return fetch(`${apiUrl}/saldos`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(saldoNovo)
+            });
+          }
+        });
+
+      
+      const orcamentoNovo = {
+        grupoId: grupoSelecionado,
+        email: currentUser.email,
+        valor: valorNum
+      };
+
+      // Verifica se já existe orçamento na API
+      fetch(`${apiUrl}/orcamentos?grupoId=${grupoSelecionado}&email=${currentUser.email}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.length > 0) {
+            // Atualiza com PUT
+            return fetch(`${apiUrl}/orcamentos/${data[0].id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...data[0], valor: valorNum })
+            });
+          } else {
+            // Cria com POST
+            return fetch(`${apiUrl}/orcamentos`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(orcamentoNovo)
+            });
+          }
+        })
+        .then(() => {
+          imprimeorcpess();
+          imprimirSaldo();
+          calcularSomaOrcamentoGrupo();
+          alert("Orçamento atualizado com sucesso!");
+          document.getElementById("entradadeorcamento").value = "";
+        })
+        .catch(err => {
+          console.error("Erro ao salvar orçamento:", err);
+          alert("Erro ao salvar orçamento.");
+        });
+    }
+
+
+    function imprimeorc() {
+      imprimirSaldo(); // Redireciona para a versão correta que lê da API
+    }
+
+
+  </script>
+
+  <!-- Módulo Dívidas e Adicionar Valores -->
+  <script>
+    const urldividas = apiUrl + '/dividas';
+    const urlreceber = apiUrl + '/receber';
+    var dividas = [];
+    var receber = [];
+
+
+
+    // Carrega valores a receber
+    fetch(urlreceber)
+      .then(response => response.json())
+      .then(dados2 => {
+        receber = [];
+        dados2.forEach(dado2 => { receber.push(dado2); });
+        CarregaValoresRec();
+      })
+      .catch(error => { console.error('Erro ao carregar valores a receber', error); });
+
+      function CarregaDividas() {
+        fetch(`${apiUrl}/dividas?grupoId=${grupoSelecionado}`)
+          .then(response => response.json())
+          .then(dados => {
+            const containerDividas = document.getElementById("listadiv");
+            containerDividas.innerHTML = "";
+
+            let somaPagas = 0;
+
+            dados.forEach(divida => {
+              if (divida.devedor !== currentUser.email) return;
+
+              const linha = document.createElement("div");
+              linha.className = "novadivida";
+
+              const checkbox = document.createElement("input");
+              checkbox.type = "checkbox";
+              checkbox.checked = divida.pago;
+              checkbox.addEventListener("change", function() {
+                DividaPaga(null, divida, this.checked);
+              });
+
+              const motivoTexto = divida.motivo ? ` (${divida.motivo})` : "";
+              const texto = document.createElement("span");
+              const nomeRecebedor = buscarNomePorEmail(divida.recebedor);
+              texto.innerText = `R$ ${divida.valor.toFixed(2)} - ${nomeRecebedor}${motivoTexto}`;
+              if (divida.pago) {
+                texto.style.textDecoration = "line-through";
+                somaPagas += divida.valor; // soma se já foi pago
+              }
+
+              linha.appendChild(checkbox);
+              linha.appendChild(texto);
+              containerDividas.appendChild(linha);
+            });
+
+            // Atualiza o texto do total pago
+            document.getElementById("somadiv").textContent = `Total pago: R$ ${somaPagas.toFixed(2)}`;
+          })
+          .catch(error => {
+            console.error("Erro ao carregar dívidas:", error);
+          });
+      }
+
+
+    function ApagarDivida(id){
+      fetch(apiUrl + '/dividas/' + id, { method:"DELETE" })
+        .then(() => { alert("Dívida apagada"); CarregaDividas(); });
+    }
+
+    
+    async function DividaPaga(index, divida, pagoOuNao) {
+      // Atualiza a dívida
+      const res = await fetch(`${apiUrl}/dividas/${divida.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pago: pagoOuNao })
+      });
+
+      if (!res.ok) return;
+
+      const devedorEmail = divida.devedor;
+      const recebedorEmail = divida.recebedor;
+
+      const [dadosDevedor, dadosRecebedor] = await Promise.all([
+        fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${devedorEmail}`).then(res => res.json()),
+        fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${recebedorEmail}`).then(res => res.json())
+      ]);
+
+      let saldoDevedor = dadosDevedor.length > 0 ? Number(dadosDevedor[0].valor) : 0;
+      let saldoRecebedor = dadosRecebedor.length > 0 ? Number(dadosRecebedor[0].valor) : 0;
+
+      if (pagoOuNao) {
+        saldoDevedor -= divida.valor;
+        saldoRecebedor += divida.valor;
+      } else {
+        saldoDevedor += divida.valor;
+        saldoRecebedor -= divida.valor;
+      }
+
+      const atualizacoes = [];
+
+      if (dadosDevedor.length > 0) {
+        atualizacoes.push(fetch(`${apiUrl}/saldos/${dadosDevedor[0].id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+        ...dadosDevedor[0],
+        grupoId: grupoSelecionado,
+        email: dadosDevedor[0].email,
+        valor: saldoDevedor
+      })
+        }));
+      }
+
+      if (dadosRecebedor.length > 0) {
+        atualizacoes.push(fetch(`${apiUrl}/saldos/${dadosRecebedor[0].id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+          ...dadosRecebedor[0],
+          grupoId: grupoSelecionado,
+          email: dadosRecebedor[0].email,
+          valor: saldoRecebedor
+        })
+        }));
+      }
+
+      const identificadorUnico = `${divida.motivo || "sem motivo"} - dívida #${divida.id}`;
+      const existe = await fetch(`${apiUrl}/receber?dequem=${encodeURIComponent(divida.devedor)}&recebedor=${encodeURIComponent(divida.recebedor)}&por=${encodeURIComponent(identificadorUnico)}`)
+
+        .then(r => r.json());
+
+        if (existe.length === 0) {
+          let motivo = "";
+          if (divida.hasOwnProperty("motivo")) {
+            motivo = divida.motivo;
+          } else if (typeof divida === "object" && divida.id) {
+            // tenta buscar da API
+            const resposta = await fetch(`${apiUrl}/dividas/${divida.id}`);
+            const dividaCompleta = await resposta.json();
+            motivo = dividaCompleta.motivo || "";
+          }
+
+        await fetch(`${apiUrl}/receber`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            valor: divida.valor,
+            dequem: divida.devedor,
+            recebedor: divida.recebedor,
+            por: divida.devedor,
+            motivo: motivo || "",
+            pago: true
+          })
+        });
+      }
+
+
+
+    await Promise.all(atualizacoes);
+    await CarregaDividas();
+    await CarregaValoresRec();
+    await imprimirSaldo();
+    showSection('sectionDividas');
+
+    if (currentUser.email === divida.recebedor) {
+      await imprimirSaldo(); // já está incluso
+    }
+    }
+
+
+
+
+    function ajustarSaldoPorDivida(divida, pago) {
+      const pagador = currentUser.email;
+      const recebedor = divida.recebedor;
+
+      Promise.all([
+        fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${pagador}`).then(res => res.json()),
+        fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${recebedor}`).then(res => res.json())
+      ])
+      .then(([dadosPagador, dadosRecebedor]) => {
+        let saldoPagador = dadosPagador.length > 0 ? Number(dadosPagador[0].valor) : 0;
+        let saldoRecebedor = dadosRecebedor.length > 0 ? Number(dadosRecebedor[0].valor) : 0;
+
+        if (pago) {
+          saldoPagador -= divida.valor;
+          saldoRecebedor += divida.valor;
+        } else {
+          saldoPagador += divida.valor;
+          saldoRecebedor -= divida.valor;
+        }
+
+        const atualizacoes = [];
+
+        if (dadosPagador.length > 0) {
+          atualizacoes.push(fetch(`${apiUrl}/saldos/${dadosPagador[0].id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...dadosPagador[0], valor: saldoPagador })
+          }));
+        }
+
+        if (dadosRecebedor.length > 0) {
+          atualizacoes.push(fetch(`${apiUrl}/saldos/${dadosRecebedor[0].id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...dadosRecebedor[0], valor: saldoRecebedor })
+          }));
+        }
+
+        return Promise.all(atualizacoes);
+      })
+      .then(() => imprimirSaldo());
+    }
+
+
+    async function CarregaValoresRec() {
+      // apenas atualiza o array 'receber' para controle interno, sem mexer na interface
+      await fetch(urlreceber)
+        .then(response => response.json())
+        .then(dados => { receber = dados; });
+    }
+
+
+    function DeletarReceber(id){
+      fetch(urlreceber + '/' + id, { method:'DELETE' })
+        .then(() => { alert("Valor deletado com sucesso!"); CarregaValoresRec(); });
+    }
+
+    function ValorRecebido(index, recebimento, pagoOuNao) {
+      fetch(`${apiUrl}/receber/${recebimento.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pago: pagoOuNao })
+      })
+      .then(() => {
+        CarregaValoresRec();
+        imprimirSaldo(); // Atualiza o saldo apenas visualmente
+        showSection('sectionDividas')
+      })
+      .catch(err => console.error("Erro ao atualizar recebimento:", err));
+    }
+
+
+    function ajustarSaldoPorRecebimento(valor, pago) {
+      const pagador = valor.dequem;
+      const recebedor = currentUser.email;
+
+      Promise.all([
+        fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${pagador}`).then(res => res.json()),
+        fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${recebedor}`).then(res => res.json())
+      ])
+      .then(([dadosPagador, dadosRecebedor]) => {
+        let saldoPagador = dadosPagador.length > 0 ? Number(dadosPagador[0].valor) : 0;
+        let saldoRecebedor = dadosRecebedor.length > 0 ? Number(dadosRecebedor[0].valor) : 0;
+
+        if (pago) {
+          saldoPagador -= valor.valor;
+          saldoRecebedor += valor.valor;
+        } else {
+          saldoPagador += valor.valor;
+          saldoRecebedor -= valor.valor;
+        }
+
+        const atualizacoes = [];
+
+        if (dadosPagador.length > 0) {
+          atualizacoes.push(fetch(`${apiUrl}/saldos/${dadosPagador[0].id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...dadosPagador[0], valor: saldoPagador })
+          }));
+        }
+
+        if (dadosRecebedor.length > 0) {
+          atualizacoes.push(fetch(`${apiUrl}/saldos/${dadosRecebedor[0].id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...dadosRecebedor[0], valor: saldoRecebedor })
+          }));
+        }
+
+        return Promise.all(atualizacoes);
+      })
+      .then(() => imprimirSaldo());
+    }
+
+    async function criarNotificacao(destinatarioEmail, titulo, mensagem) {
+      await fetch(`${apiUrl}/notificacoes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          grupoId: grupoSelecionado,
+          grupoNome: "Journey",
+          convidadoEmail: destinatarioEmail,
+          convidadoNome: destinatarioEmail,
+          remetenteEmail: currentUser.email,
+          titulo: titulo,
+          mensagem: mensagem,
+          status: "pendente",
+          timestamp: Date.now()
+        })
+      });
+    }
+
+    function buscarNomePorEmail(email) {
+      const grupoAtual = grupos.find(g => g.id == grupoSelecionado);
+      if (!grupoAtual) return email;
+      const colaborador = grupoAtual.colaboradores.find(c => c.email === email);
+      return colaborador ? colaborador.nome : email;
+    }
+
+
+    function AdicionarDivida() {
+      const valordiv = document.getElementById('valdivida').value;
+      const aquempagar = document.getElementById('aquempagar').value;
+      const por = document.getElementById('oquepagar').value;
+      const motivo = document.getElementById('motivoDivida').value.trim();
+
+      if (valordiv === "" || aquempagar === "" || por === "") {
+        alert("Preencha todos os campos para adicionar uma dívida.");
+        return;
+      }
+
+      fetch(apiUrl + "/dividas", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          valor: Number(valordiv),
+          recebedor: aquempagar,
+          por: por,
+          devedor: currentUser.email,
+          motivo: motivo,
+          pago: false
+        })
+      })
+      .then(response => response.json())
+      .then(async (data) => {
+        await criarNotificacao(
+          aquempagar, // o recebedor da dívida
+          "Nova dívida registrada",
+          `Você tem uma nova dívida de R$ ${valordiv} registrada por ${currentUser.nome}.`
+        );
+        alert("Dívida adicionada com sucesso!");
+        document.getElementById('valdivida').value = "";
+        document.getElementById('aquempagar').value = "";
+        document.getElementById('oquepagar').value = "";
+        document.getElementById('motivoDivida').value = "";
+        CarregaDividas();
+        showSection('sectionDividas');
+      })
+      .catch(error => {
+        console.error("Erro ao adicionar dívida:", error);
+        alert("Erro ao adicionar dívida.");
+      });
+    }
+
+    
+    function AdicionarValReceber() {
+      const valor = document.getElementById("valareceber").value;
+      const recebedor = document.getElementById("dequemreceber").value;
+      const devedor = document.getElementById("porreceber").value;
+      let motivo = document.getElementById("motivoReceber").value.trim();
+
+      if (motivo === "") motivo = "valor a receber";
+
+      if (!valor || !recebedor || !devedor) {
+        alert("Preencha todos os campos.");
+        return;
+      }
+
+      fetch(`${apiUrl}/dividas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          valor: Number(valor),
+          recebedor: recebedor,
+          devedor: devedor,
+          por: devedor,
+          motivo: motivo,
+          grupoId: grupoSelecionado,
+          pago: false
+        })
+      })
+      .then(async () => {
+        await fetch(`${apiUrl}/receber`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            valor: Number(valor),
+            dequem: devedor,
+            recebedor: recebedor,
+            por: devedor,
+            motivo: motivo,
+            pago: false,
+            grupoId: grupoSelecionado
+          })
+        });
+
+        await criarNotificacao(
+          devedor, // quem vai pagar
+          "Novo valor a pagar registrado",
+          `Você tem um novo valor de R$ ${valor} para pagar para ${currentUser.email}.`
+        );
+
+        alert("Valor registrado corretamente.");
+        document.getElementById("valareceber").value = "";
+        document.getElementById("porreceber").value = "";
+
+        CarregaDividas();
+        imprimeReceber();
+        imprimirSaldo();
+        showSection('sectionDividas');
+      })
+      .catch(error => {
+        console.error("Erro ao adicionar valor a receber:", error);
+        alert("Erro ao registrar valor.");
+      });
+    }
+
+
+
+
+
+    function debitarSaldo() {
+      const valor = parseFloat(document.getElementById("debitarSaldo").value);
+      if (isNaN(valor) || valor <= 0) return alert("Valor inválido");
+
+      fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${currentUser.email}`)
+        .then(res => res.json())
+        .then(data => {
+          let saldo = data.length > 0 ? Number(data[0].valor) : 0;
+          saldo -= valor;
+
+          const body = {
+            grupoId: grupoSelecionado,
+            email: currentUser.email,
+            valor: saldo
+          };
+
+          if (data.length > 0) {
+            // Atualizar
+            return fetch(`${apiUrl}/saldos/${data[0].id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body)
+            });
+          } else {
+            // Criar
+            return fetch(`${apiUrl}/saldos`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body)
+            });
+          }
+        })
+        .then(() => {
+          imprimirSaldo();
+          alert("Saldo debitado com sucesso!");
+          document.getElementById("debitarSaldo").value = "";
+        });
+    }
+
+    function depositarSaldo() {
+      const valor = parseFloat(document.getElementById("depositarSaldo").value);
+      if (isNaN(valor) || valor <= 0) return alert("Valor inválido");
+
+      fetch(`${apiUrl}/saldos?grupoId=${grupoSelecionado}&email=${currentUser.email}`)
+        .then(res => res.json())
+        .then(data => {
+          let saldo = data.length > 0 ? Number(data[0].valor) : 0;
+          saldo += valor;
+
+          const body = {
+            grupoId: grupoSelecionado,
+            email: currentUser.email,
+            valor: saldo
+          };
+
+          if (data.length > 0) {
+            // Atualizar
+            return fetch(`${apiUrl}/saldos/${data[0].id}`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body)
+            });
+          } else {
+            // Criar
+            return fetch(`${apiUrl}/saldos`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(body)
+            });
+          }
+        })
+        .then(() => {
+          imprimirSaldo();
+          alert("Saldo depositado com sucesso!");
+          document.getElementById("depositarSaldo").value = "";
+        });
+    }
+
+
+
+    function imprimeReceber() {
+      fetch(`${apiUrl}/dividas?recebedor=${currentUser.email}&grupoId=${grupoSelecionado}`)
+        .then(res => res.json())
+        .then(dividas => {
+          const container = document.getElementById("listaval");
+          container.innerHTML = "";
+
+          let soma = 0;
+
+          dividas.forEach(div => {
+            const linha = document.createElement("div");
+            linha.className = "novovalor";
+
+            if (div.pago) {
+              linha.classList.add("valorrecebido"); // riscar se pago
+              soma += div.valor;
+            }
+
+            const motivoTexto = div.motivo ? ` (${div.motivo})` : "";
+            const nomeDevedor = buscarNomePorEmail(div.por);
+            linha.innerHTML = `
+              <span>R$ ${div.valor.toFixed(2)} - ${nomeDevedor}${motivoTexto}</span>
+            `;
+            container.appendChild(linha);
+          });
+
+          document.getElementById("somareceber").textContent = `Total recebido: R$ ${soma.toFixed(2)}`;
+        });
+    }
+
+    setInterval(() => {
+    CarregaDividas(); // Atualiza "Suas Dívidas"
+    imprimeReceber(); // Atualiza "Valores a Receber"
+  }, 5000); // Atualiza a cada 5 segundos
+
+
+  </script>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" 
+    integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+</html>

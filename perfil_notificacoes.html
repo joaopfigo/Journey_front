@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil & Notificações</title>
+  <!-- Bootstrap e jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" 
+          integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" 
+          integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  <!-- Font Awesome e Bootstrap Icons -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+  <!-- Estilos próprios -->
+  <link rel="stylesheet" href="../assets/styles/style.css" />
+  <link rel="stylesheet" href="journey.css" />
+  <style>
+    /* Estilos básicos */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: sans-serif; background-color: #fff; }
+    .container { margin-top: 40px; }
+    /* Perfil */
+    #perfil { border-bottom: 1px solid #ccc; padding-bottom: 20px; }
+    .profile-info { display: flex; align-items: center; gap: 20px; }
+    .profile-photo { position: relative; width: 150px; height: 150px; }
+    .profile-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    #editProfilePhoto { position: absolute; bottom: 0; right: 0; background-color: rgba(0,0,0,0.6); 
+                        color: #fff; border: none; border-radius: 50%; padding: 5px; }
+    .profile-details p { margin: 5px 0; }
+    /* Notificações */
+    #notificacoes { margin-top: 40px; }
+    #notificacoes ul { list-style: none; padding: 0; }
+    #notificacoes li { border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px; }
+  </style>
+  <!-- Inclui o common.js para funções utilitárias (getCurrentUser, getUserKey, etc.) -->
+  <script src="common.js"></script>
+</head>
+<body>
+  <!-- Verificar se há usuário logado -->
+  <script>
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+      window.location.href = "login_cadastro.html";
+    }
+    // Exemplo: currentUser pode conter { nome: "Fulano", email: "fulano@exemplo.com", id: "123" }
+    // Cria chaves exclusivas para este usuário:
+    const profilePhotoKey = getUserKey("profilePhoto");
+    const notificacoesKey = getUserKeyFromEmail(currentUser.email, "notificacoes");
+  </script>
+  
+  <div class="container">
+    <!-- Seção de Perfil -->
+    <section id="perfil">
+      <h2>Meu Perfil</h2>
+      <div class="profile-info">
+        <div class="profile-photo">
+          <img id="profilePhoto" src="https://via.placeholder.com/150" alt="Foto de Perfil" />
+          <input type="file" id="profilePhotoInput" accept="image/*" style="display: none;">
+          <button id="editProfilePhoto" class="btn" title="Alterar Foto">
+            <i class="fa fa-camera"></i>
+          </button>
+        </div>
+        <div class="profile-details">
+          <p><strong>Nome:</strong> <span id="profileName"></span></p>
+          <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+          <p><strong>ID:</strong> <span id="profileID"></span></p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Seção de Notificações -->
+    <section id="notificacoes">
+      <h2>Notificações</h2>
+      <div id="notificacoesList">
+        <!-- Lista de notificações será carregada aqui -->
+      </div>
+      <!-- Botão para teste (adiciona uma notificação de exemplo) -->
+      <button id="addTestNotification" class="btn btn-primary mt-3">Adicionar Notificação de Teste</button>
+      <button id="limparNotificacoes" class="btn btn-danger mt-3">Limpar Todas Notificações</button>
+    </section>
+  </div>
+  
+
+  <script>
+        document.addEventListener("DOMContentLoaded", () => {
+    const currentUser = getCurrentUser();
+    if (!currentUser) {
+        window.location.href = "login_cadastro.html";
+        return;
+    }
+
+    const apiUrl = "https://journey-c6wf.onrender.com";
+
+    function getUserKeyFromEmail(email, baseKey) {
+        return baseKey + "_" + email;
+    }
+
+    const notificacoesKey = getUserKeyFromEmail(currentUser.email, "notificacoes");
+    const gruposKey = getUserKey("grupos");
+
+  
+      function salvarNotificacoes(notificacoes) {
+        localStorage.setItem(notificacoesKey, JSON.stringify(notificacoes));
+      }
+  
+      function salvarGrupos(grupos) {
+        localStorage.setItem(gruposKey, JSON.stringify(grupos));
+      }
+  
+      function loadNotificacoes() {
+        const container = document.getElementById("notificacoesList");
+        if (!container) return;
+
+        fetch(`${apiUrl}/notificacoes`)
+          .then(res => res.json())
+          .then(todasNotificacoes => {
+            const notificacoes = todasNotificacoes.filter(
+              notif => notif.convidadoEmail === currentUser.email
+            );
+
+            if (notificacoes.length === 0) {
+              container.innerHTML = "<p>Sem notificações no momento.</p>";
+              return;
+            }
+
+            let html = "<ul class='list-group'>";
+            notificacoes.forEach((item, index) => {
+              html += `<li class="list-group-item">
+                <p><strong>${item.titulo}</strong></p>
+                <p>${item.mensagem}</p>
+                <p class="text-muted" style="font-size: 0.8rem;">${new Date(item.timestamp).toLocaleString()}</p>`;
+
+              // 👉 Aqui detecta se é convite e adiciona botões
+              if (item.titulo === "Convite para Grupo" && item.status === "pendente") {
+                html += `
+                  <div class="mt-2">
+                    <button class="btn btn-success btn-sm me-2" onclick="aceitarConvite(${index})">Aceitar</button>
+                    <button class="btn btn-danger btn-sm" onclick="recusarConvite(${index})">Recusar</button>
+                  </div>
+                `;
+              } else if (item.status === "aceito") {
+                html += `<p class="text-success mt-2">Convite aceito ✅</p>`;
+              } else if (item.status === "recusado") {
+                html += `<p class="text-danger mt-2">Convite recusado ❌</p>`;
+              }
+
+              html += `</li>`;
+            });
+            html += "</ul>";
+
+            container.innerHTML = html;
+          })
+          .catch(err => {
+            console.error("Erro ao carregar notificações:", err);
+            container.innerHTML = "<p>Erro ao carregar notificações.</p>";
+          });
+      }
+
+
+  
+    window.aceitarConvite = async function(index) {
+      try {
+        const todasNotificacoes = await fetch(`${apiUrl}/notificacoes`).then(res => res.json());
+        const minhasNotificacoes = todasNotificacoes.filter(n => n.convidadoEmail === currentUser.email);
+        const convite = minhasNotificacoes[index];
+        if (!convite) return alert("Convite não encontrado.");
+
+        // Atualiza o status da notificação original
+        convite.status = "aceito";
+        await fetch(`${apiUrl}/notificacoes/${convite.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(convite)
+        });
+
+        // Puxa o grupo atual
+        const grupo = await fetch(`${apiUrl}/grupos/${convite.grupoId}`).then(res => res.json());
+        if (!grupo) return alert("Grupo não encontrado.");
+
+        // Verifica se o usuário já está no grupo
+        const jaEsta = grupo.colaboradores.some(c => c.email === currentUser.email);
+        if (!jaEsta) {
+          grupo.colaboradores.push({
+            id: currentUser.id,
+            nome: currentUser.nome,
+            email: currentUser.email,
+            senha: currentUser.senha
+          });
+
+          // Atualiza o grupo
+          await fetch(`${apiUrl}/grupos/${grupo.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(grupo)
+          });
+        }
+
+        // 🔥 Agora, notifica os outros membros (excluindo o que acabou de entrar)
+        const notificacoesParaEnviar = grupo.colaboradores
+          .filter(c => c.email !== currentUser.email) // exclui o novo
+          .map(colaborador => {
+            return fetch(`${apiUrl}/notificacoes`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                id: Date.now().toString() + Math.random(), // id único
+                grupoId: grupo.id,
+                grupoNome: grupo.nome,
+                convidadoEmail: colaborador.email,
+                convidadoNome: colaborador.nome,
+                remetenteEmail: currentUser.email, // quem causou
+                titulo: "Novo membro no grupo",
+                mensagem: `${currentUser.nome} entrou no grupo "${grupo.nome}".`,
+                status: "info",
+                timestamp: Date.now()
+              })
+            });
+          });
+
+        await Promise.all(notificacoesParaEnviar);
+
+        alert("Você entrou no grupo!");
+        loadNotificacoes();
+      } catch (error) {
+        console.error("Erro ao aceitar convite:", error);
+        alert("Erro ao aceitar convite.");
+      }
+    };
+
+
+    window.recusarConvite = function(index) {
+      fetch(`${apiUrl}/notificacoes`)
+        .then(res => res.json())
+        .then(async todasNotificacoes => {
+          const minhasNotificacoes = todasNotificacoes.filter(n => n.convidadoEmail === currentUser.email);
+          const convite = minhasNotificacoes[index];
+          if (!convite) return alert("Convite não encontrado.");
+
+          convite.status = "recusado";
+
+          await fetch(`${apiUrl}/notificacoes/${convite.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(convite)
+          });
+
+          alert("Convite recusado!");
+          loadNotificacoes();
+        })
+        .catch(err => {
+          console.error("Erro ao recusar convite:", err);
+          alert("Erro ao recusar convite.");
+        });
+    }
+
+    // Botão de teste — evita erro se botão não existir
+    const btnTeste = document.getElementById("addTestNotification");
+    if (btnTeste) {
+      btnTeste.addEventListener("click", async () => {
+        try {
+          await fetch(`${apiUrl}/notificacoes`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: Date.now().toString(),
+              grupoId: "teste123",
+              grupoNome: "Grupo de Exemplo",
+              convidadoEmail: currentUser.email,  // quem recebe a notificação
+              convidadoNome: currentUser.nome,
+              remetenteEmail: "admin@journey.com",
+              titulo: "Convite de Exemplo",
+              mensagem: "Você foi convidado para um grupo de exemplo.",
+              status: "pendente",
+              timestamp: Date.now()
+            })
+          });
+
+          alert("Notificação de teste enviada com sucesso!");
+          loadNotificacoes(); // Atualiza a lista de notificações
+        } catch (err) {
+          console.error("Erro ao adicionar notificação de teste:", err);
+          alert("Erro ao adicionar notificação.");
+        }
+      });
+    }
+
+      // Atualiza os dados do perfil
+      document.getElementById("profileName").textContent = currentUser.nome || "Sem nome";
+      document.getElementById("profileEmail").textContent = currentUser.email || "Sem email";
+      document.getElementById("profileID").textContent = currentUser.id || "N/A";
+  
+      const profilePhotoKey = getUserKey("profilePhoto");
+      const savedPhoto = localStorage.getItem(profilePhotoKey);
+      if (savedPhoto) {
+        document.getElementById("profilePhoto").src = savedPhoto;
+      }
+  
+      document.getElementById("editProfilePhoto").addEventListener("click", () => {
+        document.getElementById("profilePhotoInput").click();
+      });
+  
+      document.getElementById("profilePhotoInput").addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const imageData = e.target.result;
+            document.getElementById("profilePhoto").src = imageData;
+            localStorage.setItem(profilePhotoKey, imageData);
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+  
+      loadNotificacoes();
+
+      document.getElementById("limparNotificacoes").addEventListener("click", async () => {
+        if (!confirm("Tem certeza que deseja apagar todas as notificações?")) return;
+
+        try {
+          const res = await fetch(`${apiUrl}/notificacoes`);
+          const notificacoes = await res.json();
+
+          // Filtra apenas notificações do usuário atual
+          const minhasNotificacoes = notificacoes.filter(n => n.convidadoEmail === currentUser.email);
+
+          // Deleta todas ao mesmo tempo usando Promise.all
+          await Promise.all(
+            minhasNotificacoes.map(notif => 
+              fetch(`${apiUrl}/notificacoes/${notif.id}`, {
+                method: "DELETE"
+              })
+            )
+          );
+
+          alert("Notificações apagadas!");
+          loadNotificacoes();
+        } catch (error) {
+          console.error("Erro ao apagar notificações:", error);
+          alert("Erro ao apagar notificações.");
+        }
+      });
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journey - Fotos da Viagem</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+  <style>
+    body { font-family: sans-serif; }
+    nav { background-color: rgb(140,187,225); }
+
+    .btn {
+      transition: all 200ms ease-in;
+      transform: scale(1);
+      background-color: rgb(231,141,131);
+      color: black;
+    }
+    .btn:hover { transform: scale(1.1); }
+
+    .gallery { margin-top: 20px; }
+    .foto-card { margin-bottom: 20px; }
+
+    .media-wrapper {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .media-wrapper video,
+    .media-wrapper img {
+      width: 100%;
+      display: block;
+      cursor: pointer;
+    }
+
+    .action-buttons {
+      display: none;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    #modalMedia .autor {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    .media-wrapper.selecionado {
+  outline: 3px solid red;
+    }
+
+    .media-wrapper.selecionado::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.5); /* capa branca translúcida */
+      border-radius: 5px;
+      pointer-events: none;
+    }
+
+  </style>
+
+  <script src="common.js"></script>
+</head>
+<body>
+<header>
+  <nav class="navbar navbar-expand-lg py-0">
+    <div class="container-fluid">
+      <button id="btnVoltarFotos" class="btn btn-secondary btn-lg">Voltar</button>
+      <span class="ms-auto">Journey - Fotos da Viagem</span>
+    </div>
+  </nav>
+</header>
+
+<div class="container mt-4">
+  <div class="mb-3">
+    <label for="selectGrupo" class="form-label">Selecione o Grupo:</label>
+    <select id="selectGrupo" class="form-select"></select>
+  </div>
+
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Adicionar</button>
+      <button id="btnSelecionar" class="btn btn-warning">Selecionar mídia</button>
+    </div>
+    <div id="acoesSelecionadas" class="action-buttons">
+      <button class="btn btn-danger" onclick="apagarSelecionadas()">Apagar selecionadas</button>
+      <button class="btn btn-info" onclick="baixarSelecionadas()">Baixar selecionadas</button>
+    </div>
+    <input type="file" id="fileInput" multiple style="display:none;" accept="image/*,video/*">
+  </div>
+  <div id="containerFotos">
+    <div class="row gallery" id="gallery"></div>
+  </div>
+  
+</div>
+
+<div class="modal fade" id="modalMedia" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Visualizar Mídia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalMediaBody"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const apiUrl = "https://journey-c6wf.onrender.com";
+  const currentUser = getCurrentUser();
+  if (!currentUser) window.location.href = "login_cadastro.html";
+
+  let gruposKey = getUserKey("grupos");
+  let grupos = JSON.parse(localStorage.getItem(gruposKey) || "[]");
+  let fotos = [];
+  let grupoSelecionado = null;
+  let modoSelecao = false;
+  let selecionadas = new Set();
+
+  function atualizarSelectGrupos() {
+  const select = document.getElementById("selectGrupo");
+
+  select.innerHTML = grupos.map(g => `<option value="${g.id}">${g.nome}</option>`).join("");
+
+  const grupoExiste = grupos.some(g => g.id === grupoSelecionado);
+  if (!grupoExiste && grupos.length > 0) {
+    grupoSelecionado = grupos[0].id;
+  }
+
+  select.value = grupoSelecionado;
+
+  if (!select.dataset.listenerAdded) {
+    select.addEventListener("change", handleGrupoChange);
+    select.dataset.listenerAdded = "true";
+  }
+}
+
+
+  function handleGrupoChange(e) {
+    grupoSelecionado = e.target.value;
+    localStorage.setItem(getUserKey("grupoSelecionado"), grupoSelecionado);
+    loadFotos();
+  }
+
+  function loadFotos() {
+    selecionadas.clear();
+    document.getElementById("acoesSelecionadas").style.display = "none";
+    fetch(`${apiUrl}/fotos?grupoId=${grupoSelecionado}`)
+      .then(res => res.json())
+      .then(data => {
+        fotos = data;
+        renderGallery();
+      });
+  }
+
+  function renderGallery() {
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    fotos.forEach((foto, index) => {
+      const col = document.createElement("div");
+      col.classList.add("col-md-4", "foto-card");
+
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("media-wrapper");
+      wrapper.style.position = "relative";
+
+      const numero = document.createElement("div");
+      numero.classList.add("gallery-number");
+      numero.innerText = `${index + 1}`;
+      numero.style.position = "absolute";
+      numero.style.top = "5px";
+      numero.style.left = "10px";
+      numero.style.background = "rgba(255,255,255,0.9)";
+      numero.style.borderRadius = "50%";
+      numero.style.padding = "4px 8px";
+      numero.style.fontWeight = "bold";
+
+      wrapper.onclick = () => {
+        if (modoSelecao) {
+        if (selecionadas.has(String(foto.id))) {
+          selecionadas.delete(String(foto.id));
+          wrapper.classList.remove("selecionado");
+        } else {
+          selecionadas.add(String(foto.id));
+          wrapper.classList.add("selecionado");
+        }
+        document.getElementById("acoesSelecionadas").style.display = selecionadas.size > 0 ? "flex" : "none";
+      } else {
+        abrirModalMidia(foto);
+      }
+    };
+
+      const media = foto.tipo === "video" ? document.createElement("video") : document.createElement("img");
+      media.src = foto.url;
+      if (foto.tipo === "video") media.controls = true;
+      media.style.width = "100%";
+      media.style.borderRadius = "5px";
+
+      wrapper.appendChild(numero);
+      wrapper.appendChild(media);
+      col.appendChild(wrapper);
+      gallery.appendChild(col);
+    });
+  }
+
+
+    function abrirModalMidia(foto) {
+    const body = document.getElementById("modalMediaBody");
+    body.innerHTML = "";
+
+    const el = foto.tipo === "video" ? document.createElement("video") : document.createElement("img");
+    el.src = foto.url;
+    if (foto.tipo === "video") el.controls = true;
+    el.style.maxWidth = "100%";
+    el.style.height = "auto";
+    el.classList.add("mb-3");
+
+    const autor = document.createElement("p");
+    autor.classList.add("autor");
+    autor.innerText = `Publicado por: ${foto.email}`;
+
+    body.appendChild(el);
+    body.appendChild(autor);
+
+    const modal = new bootstrap.Modal(document.getElementById("modalMedia"));
+    modal.show();
+  }
+
+
+  function mostrarConfirmacao(mensagem, onConfirmar) {
+  document.getElementById("confirmacaoMensagem").innerText = mensagem;
+
+  const modal = new bootstrap.Modal(document.getElementById("confirmacaoModal"));
+  modal.show();
+
+  const btnConfirmar = document.getElementById("btnConfirmar");
+  const btnCancelar = document.getElementById("btnCancelar");
+
+  const limpar = () => {
+    btnConfirmar.onclick = null;
+    btnCancelar.onclick = null;
+  };
+
+  btnConfirmar.onclick = () => {
+    onConfirmar();
+    modal.hide();
+    limpar();
+  };
+
+  btnCancelar.onclick = () => {
+    limpar();
+  };
+}
+
+
+function apagarSelecionadas() {
+  const idsPermitidos = [];
+  const indicesPermitidos = [];
+  const idsSelecionadas = Array.from(selecionadas);
+
+  idsSelecionadas.forEach(idSelecionado => {
+    const index = fotos.findIndex(f => String(f.id) === String(idSelecionado));
+    if (index !== -1) {
+      const foto = fotos[index];
+      if (foto.email === currentUser.email) {
+        idsPermitidos.push(String(foto.id));
+        indicesPermitidos.push(index + 1);
+      }
+    }
+  });
+
+  if (idsPermitidos.length === 0) {
+    alert("Você não pode excluir nenhuma das mídias selecionadas.");
+    return;
+  }
+
+  if (idsPermitidos.length !== selecionadas.size) {
+    const msg = `Você só pode excluir as mídias: ${indicesPermitidos.join(", ")}. Deseja continuar?`;
+    mostrarConfirmacao(msg, () => deletarMmidias(idsPermitidos));
+  } else {
+    deletarMmidias(idsPermitidos);
+  }
+}
+
+
+function deletarMmidias(ids) {
+  const promises = ids.map(id => {
+    console.log("Tentando deletar:", id); // debug
+    return fetch(`${apiUrl}/fotos/${encodeURIComponent(id)}`, { method: "DELETE" })
+      .then(res => {
+        if (!res.ok) {
+          return res.text().then(text => {
+            console.error(`Erro ao deletar ${id}:`, res.status, text);
+          });
+        }
+      })
+      .catch(err => {
+        console.error(`Erro de conexão ao deletar ${id}:`, err);
+      });
+  });
+
+  Promise.all(promises).then(() => {
+    selecionadas.clear();
+    document.getElementById("acoesSelecionadas").style.display = "none";
+    loadFotos();
+  });
+}
+
+
+
+  function baixarSelecionadas() {
+    fotos.forEach(foto => {
+      if (selecionadas.has(String(foto.id))) {
+        const a = document.createElement("a");
+        a.href = foto.url;
+        a.download = `midia_${String(foto.id)}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    });
+  }
+
+  document.getElementById("fileInput").addEventListener("change", async e => {
+    const files = Array.from(e.target.files);
+
+    for (const file of files) {
+      const reader = new FileReader();
+
+      reader.onload = async function(evt) {
+        const tipo = file.type.startsWith("video") ? "video" : "foto";
+
+        const idUnicoFoto = Date.now().toString();
+        const idUnicoNotif = (Date.now() + 1).toString(); // evitar IDs repetidos
+
+        await fetch(`${apiUrl}/fotos`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id: idUnicoFoto,
+            grupoId: grupoSelecionado,
+            url: evt.target.result,
+            tipo: tipo,
+            email: currentUser.email
+          })
+        });
+
+        const grupoAtual = grupos.find(g => g.id === grupoSelecionado);
+
+        if (grupoAtual && grupoAtual.colaboradores) {
+          await Promise.all(
+            grupoAtual.colaboradores
+              .filter(colab => colab.email !== currentUser.email) // não notifica quem enviou
+              .map(colab => {
+                return fetch(`${apiUrl}/notificacoes`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    id: Date.now().toString() + Math.random(), // id único
+                    grupoId: grupoSelecionado,
+                    grupoNome: grupoAtual.nome || "Grupo",
+                    convidadoEmail: colab.email,
+                    convidadoNome: colab.nome,
+                    remetenteEmail: currentUser.email,
+                    titulo: "Nova mídia adicionada",
+                    mensagem: `${currentUser.nome} adicionou uma nova ${tipo === "foto" ? "foto" : "vídeo"} no grupo "${grupoAtual.nome}".`,
+                    status: "info",
+                    timestamp: Date.now()
+                  })
+                });
+              })
+          );
+        }
+
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    setTimeout(() => loadFotos(), 500);
+  });
+
+
+
+    document.getElementById("btnSelecionar").onclick = () => {
+      modoSelecao = !modoSelecao;
+      selecionadas.clear();
+      document.getElementById("acoesSelecionadas").style.display = "none";
+
+      const container = document.getElementById("containerFotos");
+      if (modoSelecao) {
+        container.classList.add("modo-selecao-ativo");
+      } else {
+        container.classList.remove("modo-selecao-ativo");
+      }
+
+      renderGallery();
+    };
+  document.getElementById("btnVoltarFotos").onclick = () => window.location.href = "veja_gps.html";
+
+  document.addEventListener("DOMContentLoaded", () => {
+  grupos = JSON.parse(localStorage.getItem(getUserKey("grupos")) || "[]");
+
+  // Recupera o grupo salvo anteriormente
+  grupoSelecionado = localStorage.getItem(getUserKey("grupoSelecionado")) || null;
+
+  atualizarSelectGrupos();
+  loadFotos();
+});
+
+
+
+</script>
+<div class="modal fade" id="confirmacaoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center p-3">
+      <div class="modal-body">
+        <p id="confirmacaoMensagem" class="mb-3"></p>
+        <button id="btnConfirmar" class="btn btn-danger me-2">Confirmar</button>
+        <button id="btnCancelar" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

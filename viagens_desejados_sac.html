@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journey - Viagens</title>
+  <!-- Bootstrap CSS e jQuery -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { font-family: sans-serif; }
+    /* Navbar */
+    .cabecalho { background-color: rgb(140,187,225); }
+    .navbar .btn { background-color: rgb(231,141,131); color: white; border: none; }
+    .navbar-nav .nav-link { cursor: pointer; }
+    /* Seções – ocultas por padrão */
+    .secao { display: none; padding: 40px 20px; }
+    .secao.active { display: block; }
+    /* Tela Inicial */
+    #inicio { text-align: center; }
+    #inicio .hero-img { max-width: 100%; }
+    .botao { 
+      padding: 10px 20px; 
+      background-color: rgb(231,141,131); 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      font-weight: bold; 
+      transition: transform 0.2s ease-in; 
+      text-decoration: none;
+    }
+    .botao:hover { transform: scale(1.05); }
+    /* Seção Destinos */
+    #destinos select { max-width: 300px; margin: auto; }
+    #listaCidades .card { margin-bottom: 20px; }
+    /* Seção SAC */
+    #sac input, #sac textarea { max-width: 500px; margin: auto; }
+  </style>
+  <!-- Funções de usuário – certifique-se de que o arquivo common.js esteja no caminho correto -->
+  <script src="common.js"></script>
+</head>
+<body>
+
+<!-- NAVBAR (Sempre visível) -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid cabecalho">
+    <a href="veja_gps.html">
+      <button class="btn btn-secondary btn-lg">Journey</button>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navBarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navBarContent">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" onclick="mostrarSecao('inicio')"><h5>Minhas Viagens</h5></a></li>
+        <li class="nav-item"><a class="nav-link" onclick="mostrarSecao('destinos')"><h5>Destinos Desejados</h5></a></li>
+        <li class="nav-item"><a class="nav-link" onclick="mostrarSecao('sac')"><h5>SAC</h5></a></li>
+      </ul>
+      <a href="login_cadastro.html">
+        <button class="btn btn-secondary btn-lg ms-3">Logout</button>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- SEÇÃO 1: TELA INICIAL (Minhas Viagens) -->
+<section id="inicio" class="secao active">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1>Explore o Mundo com a Journey!</h1>
+        <p>Descubra novos destinos, viva experiências inesquecíveis e crie memórias que durarão para sempre.</p>
+        <p>Planeje e registre suas aventuras com o Journey!</p>
+        <button class="botao mt-3" onclick="mostrarSecao('destinos')">Planejar sua Viagem</button>
+      </div>
+      <div class="col-lg-6">
+        <img id="heroImg" class="hero-img" src="https://carregandomalinhas.com.br/wp-content/uploads/2019/09/banner_full_arroundtheword.jpg" alt="Imagem inicial">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 2: DESTINOS DESEJADOS -->
+<section id="destinos" class="secao">
+  <div class="container">
+    <div class="text-center mb-4">
+      <select id="selectGrupoDestino" class="form-select w-50 m-auto">
+        <option value="">Sem grupo (viagem pessoal)</option>
+      </select>
+    </div>    
+    <h2 class="text-center mb-4">Destinos Desejados</h2>
+    <!-- Select de Países -->
+    <div class="text-center mb-4">
+      <select id="selectPais" class="form-select">
+        <option selected>Selecione um país</option>
+      </select>
+    </div>
+    <!-- Lista de Cidades -->
+    <div id="listaCidades" class="row">
+      <!-- Aqui serão exibidas as cidades do país selecionado -->
+    </div>
+    <!-- Formulário para Adicionar Nova Cidade -->
+    <div class="mt-5">
+      <h4 class="text-center">Adicionar nova cidade</h4>
+      <div class="mb-3">
+        <label for="novaCidade" class="form-label">Cidade:</label>
+        <input type="text" id="novaCidade" class="form-control" placeholder="Nome da cidade">
+      </div>
+      <div class="mb-3">
+        <label for="fotoCidade" class="form-label">Foto da cidade (opcional):</label>
+        <input type="file" id="fotoCidade" class="form-control" accept="image/*">
+      </div>
+      <button class="botao" onclick="adicionarCidade()">Adicionar Cidade</button>
+    </div>
+  </div>
+</section>
+
+<!-- SEÇÃO 3: SAC -->
+<section id="sac" class="secao">
+  <div class="container py-5">
+
+    <!-- Depoimentos -->
+    <h2 class="text-center mb-5">O que nossos usuários dizem</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <p class="card-text">“O Journey me ajudou a planejar a viagem dos meus sonhos com meus amigos. Simplesmente incrível!”</p>
+            <h6 class="card-subtitle mt-3 text-muted">— Ana Clara, Belo Horizonte</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <p class="card-text">“Nunca foi tão fácil organizar os roteiros, finanças e fotos de uma viagem em grupo. Recomendo muito!”</p>
+            <h6 class="card-subtitle mt-3 text-muted">— Marcos Silva, Curitiba</h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <p class="card-text">“A interface é super intuitiva, e as funcionalidades de grupo são top demais!”</p>
+            <h6 class="card-subtitle mt-3 text-muted">— Larissa Fontes, Salvador</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulário de Contato -->
+    <h2 class="text-center mt-5 mb-4">Fale com a gente</h2>
+    <p class="text-center text-muted">Precisa de ajuda ou quer enviar sugestões? Entre em contato pelo formulário abaixo ou escreva para <strong>joao.valle@sga.pucminas.br</strong></p>
+    
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+
+        <form id="contatoForm">
+          <div class="mb-3">
+            <label for="contatoNome" class="form-label">Seu nome</label>
+            <input type="text" class="form-control" id="contatoNome" placeholder="Digite seu nome" required>
+          </div>
+        
+          <div class="mb-3">
+            <label for="contatoEmail" class="form-label">Seu email</label>
+            <input type="email" class="form-control" id="contatoEmail" placeholder="email@exemplo.com" required>
+          </div>
+        
+          <div class="mb-3">
+            <label for="contatoTelefone" class="form-label">Seu telefone</label>
+            <input type="tel" class="form-control" id="contatoTelefone" placeholder="(00) 00000-0000">
+          </div>
+        
+          <div class="mb-3">
+            <label for="contatoAssunto" class="form-label">Assunto</label>
+            <input type="text" class="form-control" id="contatoAssunto" placeholder="Qual o motivo do contato?" required>
+          </div>
+        
+          <div class="mb-4">
+            <label for="contatoMensagem" class="form-label">Mensagem</label>
+            <textarea class="form-control" id="contatoMensagem" rows="5" placeholder="Digite sua mensagem aqui..." required></textarea>
+          </div>
+        
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-lg">Enviar Mensagem</button>
+          </div>
+        </form>        
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- SCRIPTS -->
+<script>
+  // Define a URL da API (JSON Server)
+  const apiUrl = "https://journey-c6wf.onrender.com";
+
+  // Função para alternar a exibição das seções
+  function mostrarSecao(secaoId) {
+    document.querySelectorAll('.secao').forEach(sec => sec.classList.remove('active'));
+    document.getElementById(secaoId).classList.add('active');
+  }
+
+  /* ================================
+     SEÇÃO DESTINOS – Carregamento e Manipulação
+  ================================ */
+
+  // Carrega lista de grupos para escolher destino
+  function carregarGruposDestino() {
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+
+    const grupoDestinoKey = "grupoDestinoSelecionado_" + currentUser.email;
+
+    fetch(apiUrl + "/grupos")
+      .then(res => res.json())
+      .then(grupos => {
+        const select = document.getElementById("selectGrupoDestino");
+        if (!select) return;
+
+        grupos
+          .filter(g => g.colaboradores.some(c => c.email === currentUser.email))
+          .forEach(grupo => {
+            const option = document.createElement("option");
+            option.value = grupo.id;
+            option.textContent = grupo.nome;
+            select.appendChild(option);
+          });
+
+        const grupoSalvo = localStorage.getItem(grupoDestinoKey);
+        if (grupoSalvo) {
+          select.value = grupoSalvo;
+        }
+
+        select.addEventListener("change", () => {
+          localStorage.setItem(grupoDestinoKey, select.value);
+        });
+      })
+      .catch(err => console.error("Erro ao carregar grupos para destino:", err));
+  }
+
+
+  // Carrega os países do endpoint /desejo
+  function carregarPaises() {
+    fetch(apiUrl + "/desejo")
+      .then(res => res.json())
+      .then(data => {
+        let select = document.getElementById("selectPais");
+        let html = "<option selected disabled>Selecione um país</option>";
+        data.forEach(pais => {
+          html += `<option value="${pais.id}">${pais.nome}</option>`;
+        });
+        select.innerHTML = html;
+      })
+      .catch(err => console.error("Erro ao carregar países:", err));
+  }
+
+  // Ao selecionar um país, busca e exibe suas cidades
+  document.getElementById("selectPais").addEventListener("change", function(e) {
+    const paisId = parseInt(e.target.value);
+    if (!isNaN(paisId)) {
+      fetch(apiUrl + "/desejo/" + paisId)
+        .then(res => res.json())
+        .then(pais => {
+          if (pais.cidades && Array.isArray(pais.cidades)) {
+            exibirCidades(pais.cidades);
+          } else {
+            document.getElementById("listaCidades").innerHTML =
+              "<p class='text-center'>Este país ainda não possui cidades cadastradas.</p>";
+          }
+        })
+        .catch(err => console.error("Erro ao carregar cidades:", err));
+    }
+  });
+
+  // Função para exibir as cidades em cards
+  function exibirCidades(cidades) {
+    let container = document.getElementById("listaCidades");
+    let html = "";
+    cidades.forEach(cidade => {
+      html += `
+        <div class="col-md-4 mb-3">
+          <div class="card h-100">
+            <img src="${cidade.foto}" class="card-img-top" alt="${cidade.nome}" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+              <h5 class="card-title">${cidade.nome}</h5>
+              <p class="card-text"><strong>Resumo:</strong> ${cidade.resumo}</p>
+              <p class="card-text"><strong>Recomendação:</strong> ${cidade.recomendacao}</p>
+              <button class="btn btn-outline-primary" onclick="escolherCidade('${cidade.foto.replace(/'/g, "\\'")}', '${cidade.nome}')">Escolher</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    container.innerHTML = `<div class="row">${html}</div>`;
+  }
+
+  function escolherCidade(fotoUrl, nomeCidade) {
+    const currentUser = getCurrentUser();
+    const grupoDestinoKey = "grupoDestinoSelecionado_" + currentUser.email;
+    const grupoSelecionado = localStorage.getItem(grupoDestinoKey);
+
+    if (currentUser) {
+      if (grupoSelecionado) {
+        // ➤ Se escolheu grupo ➔ Salva no grupo
+        fetch(apiUrl + "/grupos/" + grupoSelecionado)
+          .then(res => res.json())
+          .then(grupo => {
+            grupo.destino = {
+              nome: nomeCidade,
+              foto: fotoUrl,
+              resumo: "Resumo automático do destino – personalize depois."
+            };
+
+            return fetch(apiUrl + "/grupos/" + grupoSelecionado, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(grupo)
+            });
+          })
+          .then(() => {
+            // Notifica colaboradores
+            return fetch(apiUrl + "/grupos/" + grupoSelecionado)
+              .then(res => res.json())
+              .then(grupo => {
+                const promises = grupo.colaboradores
+                  .filter(c => c.email !== currentUser.email)
+                  .map(colab => {
+                    return fetch(apiUrl + "/notificacoes", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        id: Date.now().toString() + Math.random(),
+                        grupoId: grupo.id,
+                        grupoNome: grupo.nome,
+                        convidadoEmail: colab.email,
+                        convidadoNome: colab.nome,
+                        remetenteEmail: currentUser.email,
+                        titulo: "Destino adicionado",
+                        mensagem: `${currentUser.nome} adicionou o destino "${nomeCidade}" para o grupo "${grupo.nome}".`,
+                        status: "info",
+                        timestamp: Date.now()
+                      })
+                    });
+                  });
+                return Promise.all(promises);
+              });
+          })
+          .then(() => {
+            alert("Destino salvo para o grupo! Você será redirecionado para 'Veja Mais'.");
+            window.location.href = "veja_gps.html";
+          })
+          .catch(err => console.error("Erro ao salvar destino no grupo:", err));
+
+        } else {
+          // ➤ Se "Sem grupo" ➔ Salva no servidor em /destinosPessoais
+          const destinoId = currentUser.email.replace(/\W/g, "_"); // id seguro, sem @ ou .
+          const destinoPessoal = {
+            id: destinoId,
+            email: currentUser.email,
+            nome: nomeCidade,
+            foto: fotoUrl,
+            resumo: "Resumo automático do destino – personalize depois."
+          };
+
+          fetch(`${apiUrl}/destinosPessoais/${destinoId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(destinoPessoal)
+          })
+          .then(res => {
+            if (!res.ok && res.status === 404) {
+              // Se não existir ainda, faz POST
+              return fetch(`${apiUrl}/destinosPessoais`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(destinoPessoal)
+              });
+            }
+            return res;
+          })
+          .then(() => {
+            alert("Destino pessoal salvo com sucesso! Você será redirecionado para 'Veja Mais'.");
+            window.location.href = "veja_gps.html";
+          })
+          .catch(err => console.error("Erro ao salvar destino pessoal:", err));
+        }
+    }
+  }
+
+
+  // Função para adicionar uma nova cidade ao país selecionado
+  function adicionarCidade() {
+    const selectPais = document.getElementById("selectPais");
+    if (!selectPais.value || selectPais.value === "Selecione um país") {
+      alert("Por favor, escolha um país antes de adicionar uma cidade.");
+      return;
+    }
+    const paisId = parseInt(selectPais.value);
+    const nomeCidade = document.getElementById("novaCidade").value.trim();
+    const fotoInput = document.getElementById("fotoCidade");
+    
+    if (!nomeCidade) {
+      alert("Por favor, insira o nome da cidade.");
+      return;
+    }
+    
+    // Se nenhum arquivo for selecionado, pergunta se deseja prosseguir sem imagem.
+    if (fotoInput.files.length === 0) {
+      if (!confirm("Nenhuma imagem foi selecionada. Deseja prosseguir sem foto?")) {
+        return;
+      }
+    }
+    
+    // Se houver arquivo, usa FileReader para obter a imagem em base64; senão, usa string vazia.
+    if (fotoInput.files.length > 0) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Image = e.target.result;
+        enviarNovaCidade(nomeCidade, base64Image, paisId);
+      };
+      reader.readAsDataURL(fotoInput.files[0]);
+    } else {
+      enviarNovaCidade(nomeCidade, "", paisId);
+    }
+  }
+
+  // Função auxiliar para enviar a nova cidade para o servidor
+  function enviarNovaCidade(nomeCidade, imagemBase64, paisId) {
+    const novaCidade = {
+      id: Date.now(),
+      nome: nomeCidade,
+      foto: imagemBase64 || "https://via.placeholder.com/300",
+      resumo: "Descrição da cidade – personalize conforme necessário.",
+      recomendacao: "Dicas de turismo – personalize conforme necessário."
+    };
+
+    fetch(apiUrl + "/desejo/" + paisId)
+      .then(res => res.json())
+      .then(pais => {
+        const cidades = pais.cidades || [];
+        cidades.push(novaCidade);
+        return fetch(apiUrl + "/desejo/" + paisId, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...pais, cidades })
+        });
+      })
+      .then(() => {
+        alert("Cidade adicionada com sucesso!");
+        document.getElementById("novaCidade").value = "";
+        document.getElementById("fotoCidade").value = "";
+        // Atualiza a lista de cidades sem mudar de tela
+        document.getElementById("selectPais").dispatchEvent(new Event("change"));
+      })
+      .catch(err => console.error("Erro ao adicionar cidade:", err));
+  }
+
+  /* ================================
+     SEÇÃO SAC - Feedback
+  ================================ */
+  function salvaFeedback() {
+    const foto = document.getElementById("fotoInput").value.trim();
+    const nome = document.getElementById("nomeInput").value.trim();
+    const feedback = document.getElementById("feedInput").value.trim();
+
+    if (foto && nome && feedback) {
+      fetch(apiUrl + "/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ foto, nome, feedback })
+      }).then(() => {
+        alert("Feedback enviado com sucesso!");
+        document.getElementById("fotoInput").value = "";
+        document.getElementById("nomeInput").value = "";
+        document.getElementById("feedInput").value = "";
+      });
+    } else {
+      alert("Preencha todos os campos para enviar seu feedback.");
+    }
+  }
+
+  // Inicializa a lista de países quando a página carrega
+  document.addEventListener("DOMContentLoaded", () => {
+    carregarPaises();
+    carregarGruposDestino();
+  });
+
+
+  document.getElementById("contatoForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    const nome = document.getElementById("contatoNome").value.trim();
+    const email = document.getElementById("contatoEmail").value.trim();
+    const telefone = document.getElementById("contatoTelefone").value.trim();
+    const assunto = document.getElementById("contatoAssunto").value.trim();
+    const mensagem = document.getElementById("contatoMensagem").value.trim();
+
+    const corpo = `
+      Nome: ${nome}
+      Email: ${email}
+      Telefone: ${telefone}
+      Assunto: ${assunto}
+
+      Mensagem:
+      ${mensagem}
+    `;
+
+    window.location.href = `mailto:joao.valle@sga.pucminas.br?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+    });
+
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" 
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+<script>
+  window.addEventListener("load", () => {
+    const params = new URLSearchParams(window.location.search);
+    let secao = params.get("secao");
+    if (secao === "minhasviagens") secao = "inicio"; // redireciona corretamente
+    mostrarSecao(secao || "inicio");
+
+    // Adiciona um pequeno delay para garantir renderização de seções
+    setTimeout(() => {
+      mostrarSecao(secao);
+    }, 100);
+  });
+</script>
+<script>
+  window.escolherCidade = escolherCidade;
+</script>
+
+</body>
+</html>

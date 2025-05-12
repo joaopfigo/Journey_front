@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journey - Login/Cadastro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { font-family: sans-serif; }
+    .view { display: none; }
+    .active { display: block; }
+  </style>
+</head>
+  <body style="background: linear-gradient(to right, #74ebd5, #9face6); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Segoe UI', sans-serif;">
+    <div class="card shadow-lg rounded-4 p-4 w-100" style="max-width: 400px; background-color: #ffffffdd;">
+      <div id="telaInicial" class="view active text-center">
+        <h2 class="mb-4">Bem-vindo ao <strong style="color:#5061a2;">Journey</strong></h2>
+        <p class="mb-4">Explore o mundo, registre suas viagens e compartilhe aventuras.</p>
+
+        <button onclick="loginComGoogle()" class="btn btn-outline-dark w-100 mb-3">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:20px; margin-right:10px;" />
+          Entrar com Google
+        </button>
+
+        <button id="btnLogin" class="btn btn-primary w-100 mb-3">Entrar com email</button>
+        <button id="btnCadastro" class="btn btn-outline-primary w-100">Criar conta</button>
+      </div>
+
+      <div id="telaLogin" class="view">
+        <button id="btnVoltar1" class="btn btn-link text-start p-0 mb-3">&larr; Voltar</button>
+        <h3 class="mb-4 text-center">Login com Email</h3>
+        <form id="formLogin">
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="loginEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginSenha" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="loginSenha" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+      </div>
+
+      <div id="telaCadastro" class="view">
+        <button id="btnVoltar2" class="btn btn-link text-start p-0 mb-3">&larr; Voltar</button>
+        <h3 class="mb-4 text-center">Criar Conta</h3>
+        <form id="formCadastro">
+          <div class="mb-3">
+            <label for="cadastroNome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="cadastroNome" required>
+          </div>
+          <div class="mb-3">
+            <label for="cadastroEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="cadastroEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="cadastroSenha" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="cadastroSenha" required>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Inclua o common.js (para as funções getCurrentUser e getUserKey) -->
+    <script src="common.js"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
+
+    <script>
+      const apiUrl = "http://localhost:3000"; // Certifique-se de que seu JSON Server está rodando e com o recurso "usuarios" configurado
+
+      // Alterna entre as views internas
+      function showView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      }
+
+      document.getElementById('btnLogin').addEventListener('click', () => { showView('telaLogin'); });
+      document.getElementById('btnCadastro').addEventListener('click', () => { showView('telaCadastro'); });
+      document.getElementById('btnVoltar1').addEventListener('click', () => { showView('telaInicial'); });
+      document.getElementById('btnVoltar2').addEventListener('click', () => { showView('telaInicial'); });
+
+      // Lógica de Login (este exemplo usa credenciais fixas para teste; em produção você deve verificar via API)
+      document.getElementById('formLogin').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const senha = document.getElementById('loginSenha').value;
+
+        fetch("http://localhost:3000/usuarios?email=" + encodeURIComponent(email))
+          .then(res => res.json())
+          .then(usuarios => {
+            if (usuarios.length > 0) {
+              const usuario = usuarios[0];
+              if (usuario.senha === senha) {
+                sessionStorage.setItem("currentUser", JSON.stringify(usuario));
+                sessionStorage.setItem("currentUser", JSON.stringify(usuario));
+
+                // Verifica grupo ou destino
+                Promise.all([
+                  fetch(`http://localhost:3000/grupos`).then(res => res.json()),
+                  fetch(`http://localhost:3000/destinosPessoais/${usuario.email.replace(/\W/g, "_")}`).then(res => res.ok ? res.json() : null)
+                ])
+                .then(([grupos, destinoPessoal]) => {
+                  const participaDeGrupo = grupos.some(g => g.colaboradores.some(c => c.email === usuario.email));
+                  const temDestinoPessoal = destinoPessoal !== null;
+
+                  if (participaDeGrupo || temDestinoPessoal) {
+                    window.location.href = "veja_gps.html";
+                  } else {
+                    window.location.href = "viagens_desejados_sac.html?secao=minhasviagens";
+                  }
+                });
+
+              } else {
+                alert("Senha incorreta.");
+              }
+            } else {
+              alert("Usuário não encontrado.");
+            }
+          })
+          .catch(err => {
+            console.error("Erro ao efetuar login:", err);
+            alert("Erro ao efetuar login. Tente novamente.");
+          });
+      });
+
+
+      document.getElementById('formCadastro').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const nome = document.getElementById('cadastroNome').value.trim();
+        const email = document.getElementById('cadastroEmail').value.trim();
+        const senha = document.getElementById('cadastroSenha').value.trim();
+
+        // Primeiro, verifica se o e-mail já está em uso
+        fetch(`${apiUrl}/usuarios?email=${encodeURIComponent(email)}`)
+          .then(res => res.json())
+          .then(usuarios => {
+            if (usuarios.length > 0) {
+              alert("Este e-mail já está cadastrado.");
+            } else {
+              // Se não existir, cadastra novo usuário
+              fetch(`${apiUrl}/usuarios`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  id: Date.now().toString(),
+                  nome: nome,
+                  email: email,
+                  senha: senha
+                })
+              })
+              .then(() => {
+                alert("Conta criada com sucesso!");
+                // Salva no sessionStorage para fazer login automático
+                sessionStorage.setItem("currentUser", JSON.stringify({ nome, email, senha }));
+                sessionStorage.setItem("currentUser", JSON.stringify(usuario));
+
+                // Verifica grupo ou destino
+                Promise.all([
+                  fetch(`http://localhost:3000/grupos`).then(res => res.json()),
+                  fetch(`http://localhost:3000/destinosPessoais/${usuario.email.replace(/\W/g, "_")}`).then(res => res.ok ? res.json() : null)
+                ])
+                .then(([grupos, destinoPessoal]) => {
+                  const participaDeGrupo = grupos.some(g => g.colaboradores.some(c => c.email === usuario.email));
+                  const temDestinoPessoal = destinoPessoal !== null;
+
+                  if (participaDeGrupo || temDestinoPessoal) {
+                    window.location.href = "veja_gps.html";
+                  } else {
+                    window.location.href = "viagens_desejados_sac.html?secao=minhasviagens";
+                  }
+                });
+
+              })
+              .catch(error => {
+                console.error("Erro ao criar conta:", error);
+                alert("Erro ao criar conta. Tente novamente.");
+              });
+            }
+          })
+          .catch(error => {
+            console.error("Erro ao verificar usuário:", error);
+            alert("Erro ao verificar usuário. Tente novamente.");
+          });
+      });
+
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+      import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    
+      const firebaseConfig = {
+        apiKey: "AIzaSyCKwMdNu0oyVjgfhcCM5sn6w7viC1S3S_Y",
+        authDomain: "journey-cad79.firebaseapp.com",
+        projectId: "journey-cad79",
+        storageBucket: "journey-cad79.firebasestorage.app",
+        messagingSenderId: "519649034257",
+        appId: "1:519649034257:web:579203f7edf4aa942f71b0"
+      };
+    
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+    
+      window.loginComGoogle = () => {
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            const user = result.user;
+            const usuario = {
+              nome: user.displayName,
+              email: user.email,
+              foto: user.photoURL
+            };
+            sessionStorage.setItem("currentUser", JSON.stringify(usuario));
+            window.location.href = "veja_gps.html";
+          })
+          .catch((error) => {
+            alert("Erro no login com Google: " + error.message);
+            console.error(error);
+          });
+      };
+    </script>                   
+</body>
+</html>
+
