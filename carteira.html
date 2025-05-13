@@ -9,74 +9,149 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <!-- Estilos combinados -->
-  <style>
-    /* Estilos gerais combinados */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: sans-serif; background-color: #fff; }
-    /* Navbar */
-    .container-fluid { background-color: rgb(140, 187, 225); }
-    nav { display: flex; justify-content: space-between; align-items: center; background-color: rgb(140, 187, 225); }
-    .nav-item { margin: 20px; }
-    .btn { transition: all 200ms ease-in; transform: scale(1); background-color: rgb(231,141,131); color: black; }
-    .btn:hover { transform: scale(1.1); }
-    /* Seções internas */
-    .section { display: none; padding: 20px; }
-    .section.active { display: block; }
-    /* Navegação interna */
-    .internal-nav { text-align: center; margin: 20px 0; }
-    .internal-nav .btn { margin: 0 10px; }
-    /* Carteira - Estilos de orçamento */
-    .carteira-container { margin-top: 30px; }
-    .carteira-row { display: flex; flex-wrap: wrap; }
-    .carteira-col { flex: 1; min-width: 250px; padding: 20px; text-align: center; }
-    /* Dívidas e Valores (estilos combinados) */
-    .dividas-container { margin-top: 30px; }
-    .dividas-row { display: flex; flex-wrap: wrap; }
-    .dividas-col { flex: 1; min-width: 250px; padding: 20px; }
-    .link { text-decoration: none; }
-    .botao { display: block; margin-top: 10px; background-color: rgb(231,141,131); width: 240px; height: 40px; }
-    .adicionardivida, .adicionarval { margin-bottom: 20px; }
-    .adicionardivida input, .adicionarval input { width: 100%; margin: 5px 0; padding: 8px; }
-    .novadivida, .novadivida {display: flex; align-items: center; justify-content: flex-start; gap: 10px; margin: 10px 0;}
-    .impressaopagar, .impressaoreceber { margin-left: 15px; }
-    .checkdiv, .checkrec { width: 15px; height: 15px; }
-    .fa-trash { margin-left: 25px; cursor: pointer; }
-    .dividapaga, .valorrecebido { text-decoration: line-through; }
-    .exibesomadiv, .exibesomarec { text-align: center; margin-bottom: 15px; }
-    /* Editar Carteira */
-    .editar-container { margin-top: 30px; }
-    .editar-row { display: flex; flex-wrap: wrap; }
-    .editar-col { flex: 1; min-width: 250px; padding: 20px; text-align: center; }
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .carteira-row, .editar-row, .dividas-row { flex-direction: column; align-items: center; }
+<style>
+  :root {
+    --azul: #0d6efd;
+    --azul-claro: #e3f2fd;
+    --sombra: 0 4px 12px rgba(0,0,0,0.1);
+    --borda: 12px;
+  }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: var(--azul-claro);
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar {
+    background-color: var(--azul);
+  }
+
+  .navbar .btn {
+    background-color: #fff;
+    color: var(--azul);
+    font-weight: bold;
+    border-radius: var(--borda);
+  }
+
+  .internal-nav {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: var(--borda);
+    margin-top: 20px;
+    box-shadow: var(--sombra);
+  }
+
+  .internal-nav .btn {
+    margin: 5px;
+  }
+
+  .container {
+    background: white;
+    margin-top: 30px;
+    padding: 2rem;
+    border-radius: var(--borda);
+    box-shadow: var(--sombra);
+  }
+
+  h2, h4 {
+    color: var(--azul);
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  input[type="number"], input[type="text"], select {
+    width: 100%;
+    margin: 6px 0;
+    padding: 10px;
+    border-radius: var(--borda);
+    border: 1px solid #ccc;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: var(--borda);
+    font-weight: 600;
+  }
+
+  .section {
+    display: none;
+  }
+
+  .section.active {
+    display: block;
+  }
+
+  .editar-col, .carteira-col {
+    background-color: #f9f9f9;
+    border-radius: var(--borda);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--sombra);
+  }
+
+  .novadivida, .novovalor {
+    padding: 10px;
+    border-radius: var(--borda);
+    background-color: #f0f8ff;
+    margin-bottom: 10px;
+    box-shadow: var(--sombra);
+  }
+
+  .valorrecebido, .dividapaga {
+    text-decoration: line-through;
+    color: gray;
+  }
+
+  @media (max-width: 768px) {
+    .internal-nav, .container {
+      margin: 1rem;
     }
-  </style>
+
+    .btn {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .editar-col, .carteira-col {
+      margin-bottom: 1rem;
+    }
+  }
+</style>
+
   <script src="common.js"></script>
 </head>
 <body>
   <!-- Cabeçalho Comum -->
   <header>
-    <nav class="navbar navbar-expand-lg py-3">
-      <div class="container-fluid">
-        <!-- Botão Journey: permanece fixo e redireciona para o menu principal -->
-        <button type="button" class="btn btn-secondary btn-lg" onclick="showSection('sectionCarteira')">Journey</button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="viagens_desejados_sac.html"><h5>Minhas Viagens</h5></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="viagens_desejados_sac.html"><h5>Destinos Desejados</h5></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="viagens_desejados_sac.html"><h5>SAC</h5></a>
-            </li>
-          </ul>
-          <button onclick="logout()" type="button" class="btn btn-secondary btn-lg">Logout</button>
-        </div>
-      </div>
-    </nav>
+<nav class="navbar navbar-expand-lg py-3" style="background-color: #0077b6;">
+  <div class="container-fluid">
+    <a href="veja_gps.html">
+      <button type="button" class="btn btn-light btn-lg">Journey</button>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link text-white" href="viagens_desejados_sac.html?secao=minhasviagens"><h5>Minhas Viagens</h5></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="viagens_desejados_sac.html?secao=destinos"><h5>Destinos Desejados</h5></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="viagens_desejados_sac.html?secao=sac"><h5>SAC</h5></a>
+        </li>
+      </ul>
+      <button id="btnLogout" class="btn btn-secondary btn-lg ms-3" type="button" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
   </header>
 
   <!-- Navegação interna entre seções -->

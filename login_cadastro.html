@@ -71,7 +71,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js"></script>
 
     <script>
-      const apiUrl = "http://localhost:3000"; // Certifique-se de que seu JSON Server está rodando e com o recurso "usuarios" configurado
+      const apiUrl = "https://journey-c6wf.onrender.com";
 
       // Alterna entre as views internas
       function showView(id) {
@@ -90,19 +90,17 @@
         const email = document.getElementById('loginEmail').value;
         const senha = document.getElementById('loginSenha').value;
 
-        fetch("http://localhost:3000/usuarios?email=" + encodeURIComponent(email))
+        fetch(`${apiUrl}/usuarios?email=${encodeURIComponent(email)}`)
           .then(res => res.json())
           .then(usuarios => {
-            if (usuarios.length > 0) {
-              const usuario = usuarios[0];
+            const usuario = usuarios.find(u => u.email === email);
+            if (usuario) {
               if (usuario.senha === senha) {
                 sessionStorage.setItem("currentUser", JSON.stringify(usuario));
-                sessionStorage.setItem("currentUser", JSON.stringify(usuario));
 
-                // Verifica grupo ou destino
                 Promise.all([
-                  fetch(`http://localhost:3000/grupos`).then(res => res.json()),
-                  fetch(`http://localhost:3000/destinosPessoais/${usuario.email.replace(/\W/g, "_")}`).then(res => res.ok ? res.json() : null)
+                  fetch(`${apiUrl}/grupos`).then(res => res.json()),
+                  fetch(`${apiUrl}/destinosPessoais/${email.replace(/\W/g, "_")}`).then(res => res.ok ? res.json() : null)
                 ])
                 .then(([grupos, destinoPessoal]) => {
                   const participaDeGrupo = grupos.some(g => g.colaboradores.some(c => c.email === usuario.email));
@@ -127,7 +125,6 @@
             alert("Erro ao efetuar login. Tente novamente.");
           });
       });
-
 
       document.getElementById('formCadastro').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -157,12 +154,11 @@
                 alert("Conta criada com sucesso!");
                 // Salva no sessionStorage para fazer login automático
                 sessionStorage.setItem("currentUser", JSON.stringify({ nome, email, senha }));
-                sessionStorage.setItem("currentUser", JSON.stringify(usuario));
 
                 // Verifica grupo ou destino
                 Promise.all([
-                  fetch(`http://localhost:3000/grupos`).then(res => res.json()),
-                  fetch(`http://localhost:3000/destinosPessoais/${usuario.email.replace(/\W/g, "_")}`).then(res => res.ok ? res.json() : null)
+                  fetch(`${apiUrl}/grupos`).then(res => res.json()),
+                  fetch(`${apiUrl}/destinosPessoais/${email.replace(/\W/g, "_")}`).then(res => res.ok ? res.json() : null)
                 ])
                 .then(([grupos, destinoPessoal]) => {
                   const participaDeGrupo = grupos.some(g => g.colaboradores.some(c => c.email === usuario.email));

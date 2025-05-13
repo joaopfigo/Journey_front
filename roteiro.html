@@ -18,58 +18,148 @@
   <script src="../assets/js/jsonserver.js"></script>
   <script src="../assets/js/logout.js"></script>
   <script src="roteiro.js"></script>
-  <style>
+<style>
+  :root {
+    --cor-principal: #1e88e5;
+    --cor-secundaria: #64b5f6;
+    --cor-fundo: #f4f6f8;
+    --borda-suave: 14px;
+    --sombra-card: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--cor-fundo);
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+
+  header.cabecalho {
+    background: var(--cor-principal);
+  }
+
+  .navbar .btn {
+    font-weight: bold;
+    border-radius: var(--borda-suave);
+  }
+
+  .navbar-nav .nav-link h5 {
+    color: white;
+    margin: 0 10px;
+    font-weight: 600;
+  }
+
+  .btn-secondary {
+    background-color: var(--cor-secundaria);
+    border: none;
+    font-weight: 600;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #42a5f5;
+  }
+
+  .titulo-roteiro {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--cor-principal);
+  }
+
+  .btn-roteiro {
+    background-color: var(--cor-principal);
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--borda-suave);
+    padding: 10px 20px;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-roteiro:hover {
+    background-color: var(--cor-secundaria);
+  }
+
+  .card {
+    border: none;
+    border-radius: var(--borda-suave);
+    box-shadow: var(--sombra-card);
+    padding: 1.5rem;
+    background-color: white;
+  }
+
+  .card h5 {
+    font-weight: bold;
+    color: #1e88e5;
+  }
+
+  input.form-control {
+    border-radius: var(--borda-suave);
+    border: 1px solid #ccc;
+    padding: 10px;
+    transition: border-color 0.2s ease;
+  }
+
+  input.form-control:focus {
+    border-color: var(--cor-principal);
+    box-shadow: 0 0 0 0.15rem rgba(30, 136, 229, 0.25);
+  }
+
+  .btn-outline-secondary,
+  .btn-outline-danger {
+    border-radius: var(--borda-suave);
+  }
+
+  @media (max-width: 768px) {
+    .card {
+      width: 100%;
+      margin: 0 auto;
+    }
+
     .btn-roteiro {
-      background-color: rgb(231,141,131);
-      color: black;
-      border: 2px solid black;
-      transition: transform 0.2s ease-in;
-      margin: 0 10px;
+      width: 100%;
+      margin-top: 10px;
     }
-    .btn-roteiro:hover {
-      transform: scale(1.05);
+
+    select.form-select {
+      width: 100% !important;
     }
-    .titulo-roteiro {
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-    }
-  </style>
+  }
+</style>
+
   <script src="common.js"></script>
 </head>
 <body onload="loadPage()">
   <!-- Navbar -->
   <header class="cor">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary py-0">
-      <div class="container-fluid cabecalho">
+    <nav class="navbar navbar-expand-lg py-3" style="background-color: #0077b6;">
+      <div class="container-fluid">
         <a href="veja_gps.html">
-          <button type="button" class="btn btn-lg">Journey</button>
+          <button type="button" class="btn btn-light btn-lg">Journey</button>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <a class="nav-link" href="viagens_desejados_sac.html"><h5>Minhas Viagens</h5></a>
+              <a class="nav-link text-white" href="viagens_desejados_sac.html?secao=minhasviagens"><h5>Minhas Viagens</h5></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="viagens_desejados_sac.html"><h5>Destinos Desejados</h5></a>
+              <a class="nav-link text-white" href="viagens_desejados_sac.html?secao=destinos"><h5>Destinos Desejados</h5></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="viagens_desejados_sac.html"><h5>SAC</h5></a>
+              <a class="nav-link text-white" href="viagens_desejados_sac.html?secao=sac"><h5>SAC</h5></a>
             </li>
           </ul>
-          <button onclick="logout()" type="button" class="btn btn-secondary btn-lg">Logout</button>
+          <button id="btnLogout" class="btn btn-secondary btn-lg ms-3" type="button" onclick="logout()">Logout</button>
         </div>
       </div>
     </nav>
   </header>
-  
-  <!-- Botão para voltar ao menu principal -->
-  <div class="container mt-5 text-center">
-    <button id="btnVoltarRoteiro" class="btn btn-secondary">Voltar para Menu Principal</button>
-  </div>
   
   <!-- Conteúdo do Roteiro -->
   <div class="container text-center" id="tabelaPrincipal">
@@ -102,34 +192,62 @@
 
       select.innerHTML = grupos.map(g => `<option value="${g.id}">${g.nome}</option>`).join("");
 
+      // Adiciona opção de Viagem Pessoal
+      const optionPessoal = document.createElement("option");
+      optionPessoal.value = "pessoal";
+      optionPessoal.textContent = "Sem grupo - Viagem Pessoal";
+      select.appendChild(optionPessoal);
+
       select.addEventListener("change", () => {
         grupoSelecionado = select.value;
+        sessionStorage.setItem("grupoSelecionado", grupoSelecionado); // salva escolha
         carregarRoteiro();
       });
+      
+      const grupoSalvo = sessionStorage.getItem("grupoSelecionado");
 
-      if (grupos.length > 0) {
+      if (grupoSalvo && (grupoSalvo === "pessoal" || grupos.some(g => g.id === grupoSalvo))) {
+        grupoSelecionado = grupoSalvo;
+        select.value = grupoSalvo;
+      } else if (grupos.length > 0) {
         grupoSelecionado = grupos[0].id;
-        select.value = grupoSelecionado;
-        carregarRoteiro();
+        select.value = grupos[0].id;
+      } else {
+        grupoSelecionado = "pessoal";
+        select.value = "pessoal";
       }
+
+      carregarRoteiro();
+
     }
 
+    function renderRoteiroData(data) {
+      const agrupados = {};
+      data.forEach(item => {
+        const diaIndex = parseInt(item.dia) - 1;
+        if (!agrupados[diaIndex]) agrupados[diaIndex] = [];
+        agrupados[diaIndex].push({ tarefa: item.tarefa, email: item.email });
+      });
+
+      dias = Object.keys(agrupados).map(index => ({
+        tarefas: agrupados[index]
+      }));
+
+      renderDias();
+    }
+
+
     function carregarRoteiro() {
-      fetch(`${apiUrl}/roteiro?grupoId=${grupoSelecionado}`)
+      if (!grupoSelecionado) return;
+
+      const grupoId = grupoSelecionado === "pessoal"
+        ? `pessoal-${currentUser.email}`
+        : grupoSelecionado;
+
+      fetch(`${apiUrl}/roteiro?grupoId=${grupoId}`)
         .then(res => res.json())
         .then(data => {
-          const agrupados = {};
-          data.forEach(item => {
-            const diaIndex = parseInt(item.dia) - 1;
-            if (!agrupados[diaIndex]) agrupados[diaIndex] = [];
-            agrupados[diaIndex].push({ tarefa: item.tarefa, email: item.email });
-          });
-  
-          dias = Object.keys(agrupados).map(index => ({
-            tarefas: agrupados[index]
-          }));
-  
-          renderDias();
+          renderRoteiroData(data);
         });
     }
   
@@ -238,7 +356,9 @@
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                grupoId: grupoSelecionado,
+                grupoId: grupoSelecionado === "pessoal"
+                ? `pessoal-${currentUser.email}`
+                : grupoSelecionado,
                 dia: index + 1,
                 tarefa: tarefaObj.tarefa,
                 email: currentUser.email
@@ -254,29 +374,32 @@
         .then(() => {
           if (novasTarefas > 0) {
             const grupo = grupos.find(g => g.id === grupoSelecionado);
-            grupo.colaboradores
-              .filter(c => c.email !== currentUser.email)
-              .forEach(colab => {
-                fetch(`${apiUrl}/notificacoes`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    id: Date.now().toString(),
-                    grupoId: grupoSelecionado,
-                    grupoNome: grupo.nome,
-                    convidadoEmail: colab.email,
-                    convidadoNome: colab.nome || colab.email,
-                    remetenteEmail: currentUser.email,
-                    titulo: "Roteiro Atualizado",
-                    mensagem: `${currentUser.nome} adicionou ${novosDias} dia(s) e ${novasTarefas} tarefa(s) no roteiro do grupo '${grupo.nome}'.`,
-                    status: "info",
-                    timestamp: Date.now()
-                  })
-                })
-                .catch(err => {
-                  console.error("Erro ao enviar notificação:", err);
+            if (grupo && grupo.colaboradores && grupo.colaboradores.length > 0) {
+              grupo.colaboradores
+                .filter(c => c.email !== currentUser.email)
+                .forEach(colab => {
+                  fetch(`${apiUrl}/notificacoes`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      id: Date.now().toString(),
+                      grupoId: grupoSelecionado === "pessoal"
+                        ? `pessoal-${currentUser.email}`
+                        : grupoSelecionado,
+                      grupoNome: grupo.nome,
+                      convidadoEmail: colab.email,
+                      convidadoNome: colab.nome || colab.email,
+                      remetenteEmail: currentUser.email,
+                      titulo: "Roteiro Atualizado",
+                      mensagem: `${currentUser.nome} adicionou ${novosDias} dia(s) e ${novasTarefas} tarefa(s) no roteiro do grupo '${grupo.nome}'.`,
+                      status: "info",
+                      timestamp: Date.now()
+                    })
+                  }).catch(err => {
+                    console.error("Erro ao enviar notificação:", err);
+                  });
                 });
-              });
+            }
           }
   
           alert("Roteiro salvo com sucesso!");
@@ -287,10 +410,6 @@
           alert("Erro ao salvar roteiro!");
         });
     }
-  
-    document.getElementById("btnVoltarRoteiro").onclick = () => {
-      window.location.href = "veja_gps.html";
-    };
   
     document.addEventListener("DOMContentLoaded", loadPage);
   </script>  
