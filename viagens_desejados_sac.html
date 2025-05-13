@@ -251,8 +251,19 @@
         <h1>Explore o Mundo com a Journey!</h1>
         <p>Descubra novos destinos, viva experiências inesquecíveis e crie memórias que durarão para sempre.</p>
         <p>Planeje e registre suas aventuras com o Journey!</p>
-        <button class="botao mt-3" onclick="mostrarSecao('destinos')">Planejar sua Viagem</button>
+
+        <div class="mt-4">
+          <button class="botao btn btn-primary btn-lg" onclick="mostrarSecao('destinos')">Planejar sua Viagem</button>
+        </div>
+
+        <div class="mt-5">
+          <button class="btn btn-outline-secondary btn-lg" onclick="window.location.href='colaboradores.html'">
+            Gerenciar Grupos e Colaboradores
+          </button>
+          <p class="text-muted small mt-2">Crie ou gerencie seus grupos antes de escolher destinos.</p>
+        </div>
       </div>
+
       <div class="col-lg-6 text-center">
         <img id="heroImg" class="hero-img" src="https://carregandomalinhas.com.br/wp-content/uploads/2019/09/banner_full_arroundtheword.jpg" alt="Banner de viagem com mapa e elementos turísticos">
       </div>
@@ -264,6 +275,7 @@
 <section id="destinos" class="secao">
   <div class="container">
     <div class="text-center mb-4">
+      <p class="text-center fw-semibold mb-2">Selecione um grupo para definir seu destino:</p>
       <select id="selectGrupoDestino" class="form-select w-50 m-auto">
         <option value="">Sem grupo (viagem pessoal)</option>
       </select>
