@@ -71,7 +71,7 @@
   </style>
 <!-- Inclui o common.js para funções como getCurrentUser e getUserKey -->
 <script src="common.js"></script>
-<script>const apiUrl = "http://localhost:3000";</script>
+<script>const apiUrl = "https://journey-c6wf.onrender.com";</script>
   
 <script src="jsonserver.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -472,18 +472,28 @@ function openGoogleMaps() {
 
 
     
-    function displayMedia(src) {
-      const mediaElement = document.createElement(src.startsWith('data:video') ? 'video' : 'img');
-      mediaElement.src = src;
-      if(src.startsWith('data:video')) { mediaElement.controls = true; }
-      mediaElement.style.maxWidth = "100%";
-      mediaElement.style.maxHeight = "100%";
-      mediaElement.style.objectFit = "contain";
-  
-      dropZone.style.border = "none";
-      dropZone.innerHTML = "";
-      dropZone.appendChild(mediaElement);
-    }
+function displayMedia(src) {
+  const mediaElement = document.createElement(src.startsWith('data:video') ? 'video' : 'img');
+  mediaElement.src = src;
+  if (src.startsWith('data:video')) {
+    mediaElement.controls = true;
+  }
+  mediaElement.style.maxWidth = "100%";
+  mediaElement.style.maxHeight = "100%";
+  mediaElement.style.objectFit = "contain";
+
+  dropZone.style.border = "none";
+  dropZone.innerHTML = "";
+  dropZone.appendChild(mediaElement);
+
+  // Mostra a imagem também no elemento #fotoViagem, se existir
+  const imgTag = document.getElementById("fotoViagem");
+  if (imgTag) {
+    imgTag.src = src;
+    imgTag.style.display = "block";
+  }
+}
+
     let debounceTimer;
 
     ["tripName", "tripResume"].forEach(id => {
