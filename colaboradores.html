@@ -319,9 +319,17 @@
       fetch(apiUrl + "/usuarios?email=" + encodeURIComponent(emailColab))
         .then(res => res.json())
         .then(usuarios => {
-          if (usuarios.length === 0) {
-            return alert("Email não cadastrado.");
-          }
+        if (usuarios.length === 0) {
+          // Enviar convite por e-mail via EmailJS
+          const grupo = grupos.find(g => g.id === grupoId);
+          enviarConviteEmail(
+            emailColab,
+            grupo ? grupo.nome : 'Grupo Journey',
+            currentUser.nome,
+            currentUser.email
+          );
+          return;
+        }
 
           const grupo = grupos.find(g => g.id === grupoId);
           if (!grupo) return;
@@ -365,7 +373,30 @@
     function getUserKeyFromEmail(email, baseKey) {
       return baseKey + "_" + email;
     }
+
+    function enviarConviteEmail(emailConvidado, nomeGrupo, nomeRemetente, emailRemetente) {
+      emailjs.send('service_fxyrl11', 'template_jq24945', {
+        to_email: emailConvidado,
+        group_name: nomeGrupo,
+        inviter_name: nomeRemetente,
+        inviter_email: emailRemetente,
+        registration_link: 'https://journey-front-alpha.vercel.app/login_cadastro.html?email=' + encodeURIComponent(emailConvidado)
+      })
+      .then(function(response) {
+        alert('Convite enviado por e-mail com sucesso para ' + emailConvidado);
+      }, function(error) {
+        alert('Erro ao enviar convite por e-mail: ' + error.text);
+      });
+    }
+
+
   </script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+      (function(){
+        emailjs.init('KaYOHczewJ9Dyu3pB'); 
+      })();
+    </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

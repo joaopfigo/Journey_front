@@ -215,13 +215,47 @@
               foto: user.photoURL
             };
             sessionStorage.setItem("currentUser", JSON.stringify(usuario));
-            window.location.href = "veja_gps.html";
+
+            // Agora, verifica e cadastra no backend se não existir:
+            fetch(`${apiUrl}/usuarios?email=${encodeURIComponent(user.email)}`)
+              .then(res => res.json())
+              .then(usuarios => {
+                if (usuarios.length === 0) {
+                  // Usuário ainda não está no db.json, registra agora
+                  fetch(`${apiUrl}/usuarios`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      id: Date.now().toString(),
+                      nome: user.displayName || 'Usuário Google',
+                      email: user.email,
+                      foto: user.photoURL || ""
+                    })
+                  })
+                  .then(() => {
+                    // Agora sim, pode redirecionar normalmente
+                    window.location.href = "veja_gps.html";
+                  })
+                  .catch((error) => {
+                    alert("Erro ao registrar usuário no sistema interno: " + error.message);
+                    console.error(error);
+                  });
+                } else {
+                  // Usuário já está cadastrado no db.json, redireciona normalmente
+                  window.location.href = "veja_gps.html";
+                }
+              })
+              .catch((error) => {
+                alert("Erro ao verificar usuário no sistema interno: " + error.message);
+                console.error(error);
+              });
           })
           .catch((error) => {
             alert("Erro no login com Google: " + error.message);
             console.error(error);
           });
       };
+
     </script>                   
 </body>
 </html>

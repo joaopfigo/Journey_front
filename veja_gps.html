@@ -364,50 +364,58 @@
   let map, marker, mapInitialized = false;
 
 document.getElementById("btnAbrirGPS").addEventListener("click", function () {
-  const modal = new bootstrap.Modal(document.getElementById("modalGPS"));
+  const modalElement = document.getElementById("modalGPS");
+  const modal = new bootstrap.Modal(modalElement);
   modal.show();
 
-  const status = document.getElementById("gpsStatus");
+  // Adiciona evento apenas UMA vez (por segurança)
+  modalElement.addEventListener('shown.bs.modal', function onShow() {
+    const status = document.getElementById("gpsStatus");
 
-  if (!navigator.geolocation) {
-    status.textContent = "Geolocalização não suportada.";
-    return;
-  }
-
-  status.textContent = "Localizando você...";
-
-  navigator.geolocation.watchPosition(
-    function (position) {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-
-      status.textContent = `Latitude: ${lat.toFixed(5)}, Longitude: ${lon.toFixed(5)}`;
-
-      setTimeout(() => {
-        if (!mapInitialized) {
-          map = L.map("gpsMap").setView([lat, lon], 16);
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: '&copy; OpenStreetMap contributors',
-          }).addTo(map);
-          marker = L.marker([lat, lon]).addTo(map);
-          mapInitialized = true;
-        } else {
-          marker.setLatLng([lat, lon]);
-          map.setView([lat, lon]);
-        }
-      }, 500); // Espera o modal abrir
-    },
-    function (err) {
-      console.error("Erro ao obter localização:", err);
-      status.textContent = "Não foi possível obter sua localização.";
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0,
+    if (!navigator.geolocation) {
+      status.textContent = "Geolocalização não suportada.";
+      return;
     }
-  );
+
+    status.textContent = "Localizando você...";
+
+    navigator.geolocation.watchPosition(
+      function (position) {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        status.textContent = `Latitude: ${lat.toFixed(5)}, Longitude: ${lon.toFixed(5)}`;
+
+        setTimeout(() => {
+          if (!mapInitialized) {
+            map = L.map("gpsMap").setView([lat, lon], 16);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+              attribution: '&copy; OpenStreetMap contributors',
+            }).addTo(map);
+            marker = L.marker([lat, lon]).addTo(map);
+            mapInitialized = true;
+          } else {
+            marker.setLatLng([lat, lon]);
+            map.setView([lat, lon]);
+          }
+        }, 500);
+      },
+      function (err) {
+        console.error("Erro ao obter localização:", err);
+        status.textContent = "Não foi possível obter sua localização.";
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+
+    // Remove o evento após execução para não duplicar
+    modalElement.removeEventListener('shown.bs.modal', onShow);
+  });
 });
+
 
 function openGoogleMaps() {
   if (!navigator.geolocation) {
